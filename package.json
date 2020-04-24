@@ -1,0 +1,17 @@
+{
+  "name": "ytdl-music",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^8.2.3"
+  },
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "ffmpeg-static": "^4.1.1",
+    "sanitize-filename": "^1.6.3",
+    "ytdl-core": "^2.1.1"
+  }
+}

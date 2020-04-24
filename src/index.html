@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="index.css"/>
+  <title>Download Window</title>
+</head>
+
+<body>
+  <button id="test-button">Fake a Request</button>
+  
+  <div class="body">
+    <div class="sidebar" id="sidebar"></div>
+    <div id="welcome" class="welcome">
+      <h1>ytdl-music</h1>
+      <p>To begin, browse to an album, then click on the album on the left.</p>
+    </div>
+    <div id="editor" class="edit hidden">
+      <div class="selected-album-details">
+        <img id="selected-album-cover" class="selected-album-cover"/>
+        <span id="selected-album-title" class="selected-album-title"></span>
+        <span id="selected-album-artist" class="selected-album-artist"></h1>
+      </div>
+      <label for="artist-field">Artist</label>
+      <input id="artist-field" placeholder="Artist (Optional - Autofilled)" />
+      <label for="genre-field">Genre</label>
+      <input id="genre-field" placeholder="Genre" />
+      <button id="download-button">Download</button>
+      <span id="download-status"></span>
+    </div>
+  </div>
+
+  <template id="sidebar-button-template">
+    <div class="sidebar-button" id="button">
+      <span id="title" class="sidebar-button-album-title"></span>
+      <span id="artist" class="sidebar-button-album-artist"></span>
+    </div>
+  </template>
+  <script src="index.js"></script>
+</body>
+
+</html>

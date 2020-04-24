@@ -1,0 +1,51 @@
+.body {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.hidden {
+  display: none;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-button {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+}
+.sidebar-button:hover {
+  background-color: #ddd;
+}
+.sidebar-button-album-artist {
+  font-style: italic;
+}
+
+.selected-album-details {
+  display: grid;
+  grid-template-areas:
+    "cover title"
+    "cover artist";
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    grid-gap: 5px;
+    gap: 10px;
+}
+.selected-album-cover {
+  grid-area: cover;
+  width: 128px;
+  height: 128px;
+  object-fit: contain;
+  background-color: gray;
+}
+.selected-album-title {
+  grid-area: title;
+  font-size: 32pt;
+}
+.selected-album-artist {
+  grid-area: artist;
+  font-size: 20pt;
+}
