@@ -4,13 +4,24 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^8.2.3"
+    "@types/react": "^16.9.34",
+    "@types/react-dom": "^16.9.6",
+    "electron": "^8.2.3",
+    "sass": "^1.26.5",
+    "typescript": "^3.8.3"
   },
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build": "parcel build src/index.html --target electron",
+    "watch": "parcel src/index.html"
   },
   "dependencies": {
+    "autoprefixer": "^9.7.6",
     "ffmpeg-static": "^4.1.1",
+    "parcel-bundler": "^1.12.4",
+    "postcss-modules": "^2.0.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "sanitize-filename": "^1.6.3",
     "ytdl-core": "^2.1.1"
   }
