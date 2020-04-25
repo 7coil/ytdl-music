@@ -1,0 +1,18 @@
+.button {
+  background-color: #ddd;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.2em;
+  padding: 0.2em;
+  &:hover, &.selected {
+    background-color: #eee;
+  }
+}
+
+.title {
+  font-size: 20pt;
+}
+
+.artist {
+  font-size: 16pt;
+}

@@ -22,7 +22,12 @@ const createWindow = () => {
 
   // and load the index.html of the app.
   win.loadURL('https://music.youtube.com/')
-  page.loadFile('src/index.html')
+
+  if (process.env.NODE_ENV === 'development') {
+    page.loadURL('http://127.0.0.1:1234')
+  } else {
+    page.loadFile('dist/index.html')
+  }
 
   ipcMain.on('http-request', (e, data) => {
     page.webContents.send('http-request', data)
