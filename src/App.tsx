@@ -78,7 +78,8 @@ class App extends Component<{}, { albums: Album[], selectedAlbum: Album, status:
       .then((result) => {
         if (result.canceled) return;
         this.setState({
-          downloadState: DownloadState.DOWNLOADING
+          downloadState: DownloadState.DOWNLOADING,
+          status: []
         })
 
         const additionalMetadata: {[key: string]: string | number} = {}
