@@ -2,3 +2,7 @@
   display: grid;
   grid-template-columns: minmax(30vw, 400px) 1fr;
 }
+
+.hidden {
+  display: none;
+}

@@ -24,7 +24,7 @@ const createWindow = () => {
   win.loadURL('https://music.youtube.com/')
 
   if (process.env.NODE_ENV === 'development') {
-    page.loadURL('http://127.0.0.1:1234')
+    page.loadURL('http://127.0.0.1:1234?development=true')
   } else {
     page.loadFile('dist/index.html')
   }

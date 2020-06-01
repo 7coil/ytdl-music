@@ -9,13 +9,14 @@ enum DownloadState {
   READY, DOWNLOADING, DOWNLOADED, ERROR
 }
 
-class App extends Component<{}, { albums: Album[], selectedAlbum: Album, status: string[], downloadState: DownloadState, overwriteGenre: string, overwriteArtist: string }> {
+class App extends Component<{}, { albums: Album[], selectedAlbum: Album, testPayloadButton: boolean, status: string[], downloadState: DownloadState, overwriteGenre: string, overwriteArtist: string }> {
   constructor(props) {
     super(props);
 
     this.state = {
       albums: [],
       selectedAlbum: null,
+      testPayloadButton: false,
       status: [],
       downloadState: DownloadState.READY,
       overwriteGenre: '',
@@ -45,6 +46,15 @@ class App extends Component<{}, { albums: Album[], selectedAlbum: Album, status:
       ipcRenderer.on('http-request', (e, data) => {
         this.addAlbumFromMutations(JSON.parse(data))
       })
+    }
+
+    if (window.location) {
+      const searchParams = new URLSearchParams(window.location.search);
+      if (searchParams.get('development') === 'true') {
+        this.setState({
+          testPayloadButton: true
+        })
+      }
     }
   }
   async addTestPayload() {
@@ -82,7 +92,7 @@ class App extends Component<{}, { albums: Album[], selectedAlbum: Album, status:
           status: []
         })
 
-        const additionalMetadata: {[key: string]: string | number} = {}
+        const additionalMetadata: { [key: string]: string | number } = {}
 
         if (this.state.overwriteArtist.length !== 0) additionalMetadata.artist = this.state.overwriteArtist
         if (this.state.overwriteGenre.length !== 0) additionalMetadata.genre = this.state.overwriteGenre
@@ -117,7 +127,7 @@ class App extends Component<{}, { albums: Album[], selectedAlbum: Album, status:
   }
   render() {
     return <div>
-      <button onClick={this.addTestPayload}>Create Test Payload</button>
+      <button onClick={this.addTestPayload} className={!this.state.testPayloadButton && styles.hidden}>Create Test Payload</button>
       <div className={styles.container}>
         {
           this.state.downloadState !== DownloadState.READY ?
