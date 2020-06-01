@@ -1,5 +1,11 @@
 # ytdl-music
-Use the power of ytdl-core to download from YouTube.
+An electron frontend for `ytdl-core` for YouTube Music.
+
+- Embeds Song Number within Album
+- Embeds Album Artist
+- Embeds Album Cover
+- Embeds Song Release Date
+- Embeds Genre
 
 ## Usage
 1. Open a command prompt
