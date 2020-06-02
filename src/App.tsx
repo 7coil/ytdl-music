@@ -4,12 +4,15 @@ import { AlbumButton } from './components/AlbumButton';
 import styles from './index.module.scss';
 import { testPayloads } from './payloads';
 import './scss/index.scss';
+import { combineStyles } from './helpers/combineStyles';
 
 enum DownloadState {
   READY, DOWNLOADING, DOWNLOADED, ERROR
 }
 
 class App extends Component<{}, { albums: Album[], selectedAlbum: Album, testPayloadButton: boolean, status: string[], downloadState: DownloadState, overwriteGenre: string, overwriteArtist: string }> {
+  private youtubeWebView: React.RefObject<HTMLDivElement> = React.createRef();
+
   constructor(props) {
     super(props);
 
@@ -28,6 +31,8 @@ class App extends Component<{}, { albums: Album[], selectedAlbum: Album, testPay
     this.setStatus = this.setStatus.bind(this);
     this.handleArtistChange = this.handleArtistChange.bind(this);
     this.handleGenreChange = this.handleGenreChange.bind(this);
+    this.handleWindowResize = this.handleWindowResize.bind(this);
+    this.setYouTubeVisibility = this.setYouTubeVisibility.bind(this);
   }
   addAlbumFromMutations(data) {
     return new Promise((resolve) => {
@@ -41,11 +46,15 @@ class App extends Component<{}, { albums: Album[], selectedAlbum: Album, testPay
     })
   }
   componentDidMount() {
+    this.setYouTubeVisibility(true);
+
     if (window.require) {
       const { ipcRenderer } = window.require('electron');
       ipcRenderer.on('http-request', (e, data) => {
         this.addAlbumFromMutations(JSON.parse(data))
       })
+
+      requestAnimationFrame(this.handleWindowResize)
     }
 
     if (window.location) {
@@ -55,6 +64,12 @@ class App extends Component<{}, { albums: Album[], selectedAlbum: Album, testPay
           testPayloadButton: true
         })
       }
+    }
+  }
+  setYouTubeVisibility(visibility: boolean) {
+    if (window.require) {
+      const { ipcRenderer } = window.require('electron');
+      ipcRenderer.send('show-youtube', visibility)
     }
   }
   async addTestPayload() {
@@ -125,57 +140,80 @@ class App extends Component<{}, { albums: Album[], selectedAlbum: Album, testPay
       overwriteGenre: event.target.value
     })
   }
+  handleWindowResize() {
+    const youtubeView = window.require('electron').remote.getCurrentWindow().getBrowserView();
+
+    if (youtubeView && this.youtubeWebView.current) {
+      youtubeView.setBounds({
+        x: this.youtubeWebView.current.offsetLeft,
+        y: this.youtubeWebView.current.offsetTop,
+        width: this.youtubeWebView.current.offsetWidth,
+        height: this.youtubeWebView.current.offsetHeight
+      })
+    }
+
+    requestAnimationFrame(this.handleWindowResize)
+  }
   render() {
-    return <div>
-      <button onClick={this.addTestPayload} className={!this.state.testPayloadButton && styles.hidden}>Create Test Payload</button>
+    return (
       <div className={styles.container}>
         {
           this.state.downloadState !== DownloadState.READY ?
-            <div>
-              <h2>Operating Status</h2>
+            <div className={styles.column}>
+              <h2>Download Status</h2>
               <ul>
                 {this.state.status.map((status, index) => <li key={index}>{status}</li>)}
               </ul>
               <button onClick={() => this.setState({ downloadState: DownloadState.READY })} disabled={this.state.downloadState === DownloadState.DOWNLOADING}>Back to Downloader</button>
             </div> :
-            <div>
+            <div className={styles.column}>
+              <h2>Actions</h2>
+              <button onClick={this.addTestPayload} className={!this.state.testPayloadButton && styles.hidden}>
+                Inject test payload
+              </button>
+              <button onClick={this.downloadDialog} disabled={this.state.downloadState !== DownloadState.READY || this.state.selectedAlbum === null}>
+                Download currently selected album
+              </button>
+              <h2>Viewer</h2>
+              <AlbumButton title="YouTube Music" artist="Search for Albums" selected={this.state.selectedAlbum === null} onClick={() => { this.setState({ selectedAlbum: null }); this.setYouTubeVisibility(true) }} />
               <h2>Albums</h2>
               {this.state.albums.length === 0 && <p>There are no albums to select from.</p>}
-              {this.state.albums.map((album, index) => <AlbumButton key={index} album={album} selected={this.state.selectedAlbum === album} onClick={() => { this.setState({ selectedAlbum: album }) }} />)}
+              {this.state.albums.map((album, index) => <AlbumButton key={index} album={album} selected={this.state.selectedAlbum === album} onClick={() => { this.setState({ selectedAlbum: album }); this.setYouTubeVisibility(false) }} />)}
             </div>
         }
         {
           this.state.selectedAlbum ?
-            <div>
+            <div className={combineStyles([styles.column, styles.selectedAlbumColumn])}>
               <h1>{this.state.selectedAlbum.title}</h1>
               <h2>By {this.state.selectedAlbum.artist}</h2>
-              <h3>Overwrite Fields</h3>
-              <p>By entering text into these fields, you overwrite the specific field on every single song.</p>
-              <div>
-                <p>
-                  Artist<br />
-                  <small>If left empty, author of each song will be used. Recommended for an album made by many people.</small>
-                </p>
-                <input value={this.state.overwriteArtist} onChange={this.handleArtistChange} disabled={this.state.downloadState !== DownloadState.READY}></input>
-              </div>
+              <h3>Optional Fields</h3>
+              <p>These fields are not automatically filled out by the software (because YouTube does not provide them)</p>
               <div>
                 <p>
                   Genre<br />
-                  <small>If left empty, the resulting MP3 will also have no genre.</small>
+                  <small>Inserts the genre</small>
                 </p>
                 <input value={this.state.overwriteGenre} onChange={this.handleGenreChange} disabled={this.state.downloadState !== DownloadState.READY}></input>
               </div>
+              <h3>Override Fields</h3>
+              <p>By entering text into these fields, you override the specific field on every single song.</p>
+              <div>
+                <p>
+                  Artist<br />
+                  <small>Replaces artist for all songs in album. Not recommended for albums with varying artists.</small>
+                </p>
+                <input value={this.state.overwriteArtist} onChange={this.handleArtistChange} disabled={this.state.downloadState !== DownloadState.READY}></input>
+              </div>
+              <h3>Album</h3>
+              <h4>Album Cover</h4>
+              <img className={styles.albumCover} src={this.state.selectedAlbum.getLargestAlbumCover().url}></img>
               <h3>Songs</h3>
-              <button onClick={this.downloadDialog} disabled={this.state.downloadState !== DownloadState.READY}>Download</button>
-              <table>
+              <table className={styles.albumSongsTable}>
                 <thead>
                   <tr>
-                    <td>Picture</td>
-                    <td>#</td>
-                    <td>Title</td>
-                    <td>Artist</td>
-                    <td>Video ID</td>
-                    <td>Audio ID</td>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th>Artist</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -184,25 +222,26 @@ class App extends Component<{}, { albums: Album[], selectedAlbum: Album, testPay
                       .sort((songA, songB) => songA.trackNumber - songB.trackNumber)
                       .map((song) =>
                         <tr key={song.id}>
-                          <td><img src={song.getSmallestAlbumCover().url} /></td>
                           <td>{song.trackNumber}</td>
                           <td>{song.title}</td>
                           <td>{song.artist}</td>
-                          <td>{song.videoID}</td>
-                          <td>{song.audioID}</td>
                         </tr>
                       )
                   }
                 </tbody>
               </table>
             </div> :
-            <div>
-              <h1>Welcome to ytdl-music</h1>
-              <p>Navigate to an album page in YouTube Music, and then return here to select the album on the left hand pane.</p>
+            <div className={styles.column} ref={this.youtubeWebView}>
+              <h1>YouTube should be here</h1>
+              <p>
+                Please wait for the Electon webview to overlay YouTube on top of this area.
+                This should be done within seconds.<br />
+                If this is not the case, please create an issue on GitHub.
+              </p>
             </div>
         }
       </div>
-    </div>
+    )
   }
 }
 

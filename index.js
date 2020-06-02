@@ -1,36 +1,46 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, BrowserView, ipcMain } = require('electron')
 const path = require('path');
 
 const createWindow = () => {
   // Create the browser window.
-  let win = new BrowserWindow({
+  let youtubeView = new BrowserView({
     width: 800,
     height: 600,
     webPreferences: {
       nodeIntegration: true,
-      preload: path.join(__dirname, 'preload.js')
-    }
+      preload: path.join(__dirname, 'preload.js'),
+    },
   })
 
-  let page = new BrowserWindow({
-    width: 800,
+  let ytdlMusicWindow = new BrowserWindow({
+    width: 900,
     height: 600,
     webPreferences: {
       nodeIntegration: true
     }
   })
 
+  ytdlMusicWindow.addBrowserView(youtubeView);
+
   // and load the index.html of the app.
-  win.loadURL('https://music.youtube.com/')
+  youtubeView.webContents.loadURL('https://music.youtube.com/')
 
   if (process.env.NODE_ENV === 'development') {
-    page.loadURL('http://127.0.0.1:1234?development=true')
+    ytdlMusicWindow.loadURL('http://127.0.0.1:1234?development=true')
   } else {
-    page.loadFile('dist/index.html')
+    ytdlMusicWindow.loadFile('dist/index.html')
   }
 
   ipcMain.on('http-request', (e, data) => {
-    page.webContents.send('http-request', data)
+    ytdlMusicWindow.webContents.send('http-request', data)
+  })
+
+  ipcMain.on('show-youtube', (e, show) => {
+    if (show) {
+      ytdlMusicWindow.addBrowserView(youtubeView);
+    } else {
+      ytdlMusicWindow.removeBrowserView(youtubeView);
+    }
   })
 }
 

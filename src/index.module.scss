@@ -1,6 +1,38 @@
 .container {
   display: grid;
-  grid-template-columns: minmax(30vw, 400px) 1fr;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+
+  grid-template-columns: 300px minmax(auto, 800px);
+  gap: 1em;
+  justify-content: center;
+}
+
+.column {
+  background-color: #f9f9f9;
+  padding: 1em;
+  box-sizing: border-box;
+
+  &.selectedAlbumColumn {
+    overflow-y: scroll;
+    height: 100vh;
+  }
+
+}
+
+.albumCover {
+  max-width: 256px;
+}
+
+.albumSongsTable {
+  width: 100%;
+  border-collapse: collapse;
+  td {
+    border-style: solid;
+    border-width: 1px;
+    padding: 0.25em;
+  }
 }
 
 .hidden {
