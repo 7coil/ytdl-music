@@ -13,12 +13,11 @@
   background-color: #f9f9f9;
   padding: 1em;
   box-sizing: border-box;
+  overflow-y: auto;
 
   &.selectedAlbumColumn {
-    overflow-y: scroll;
     height: 100vh;
   }
-
 }
 
 .albumCover {
