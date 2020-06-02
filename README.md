@@ -1,6 +1,8 @@
 # ytdl-music
 An electron frontend for `ytdl-core` for YouTube Music.
 
+- Downloads regular music
+    - Does not download audio from Music Video
 - Embeds Song Number within Album
 - Embeds Album Artist
 - Embeds Album Cover
@@ -25,3 +27,6 @@ The rest is just waiting.
 
 ## Help
 For support, try [my discord server](https://discordapp.com/invite/wHgdmf4).
+
+## Licence
+This software package is licenced under the MIT licence.
