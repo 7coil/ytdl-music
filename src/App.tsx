@@ -167,6 +167,19 @@ class App extends Component<{}, { albums: Album[], selectedAlbum: Album, testPay
               <button onClick={() => this.setState({ downloadState: DownloadState.READY })} disabled={this.state.downloadState === DownloadState.DOWNLOADING}>Back to Downloader</button>
             </div> :
             <div className={styles.column}>
+              <h1>ytdl-music</h1>
+              {this.state.albums.length === 0 &&
+                <>
+                  <h2>Welcome!</h2>
+                  <p>
+                    Welcome to <b>ytdl-music</b>!
+                  </p>
+                  <p>
+                    To get started, click onto an album on YouTube Music.
+                    The album will then appear in the "Albums" sections.
+                  </p>
+                </>
+              }
               <h2>Actions</h2>
               <button onClick={this.addTestPayload} className={!this.state.testPayloadButton && styles.hidden}>
                 Inject test payload
@@ -177,7 +190,11 @@ class App extends Component<{}, { albums: Album[], selectedAlbum: Album, testPay
               <h2>Viewer</h2>
               <AlbumButton title="YouTube Music" artist="Search for Albums" selected={this.state.selectedAlbum === null} onClick={() => { this.setState({ selectedAlbum: null }); this.setYouTubeVisibility(true) }} />
               <h2>Albums</h2>
-              {this.state.albums.length === 0 && <p>There are no albums to select from.</p>}
+              {this.state.albums.length === 0 && <>
+                <p>
+                  There are currently no albums to select from.
+                </p>
+              </>}
               {this.state.albums.map((album, index) => <AlbumButton key={index} album={album} selected={this.state.selectedAlbum === album} onClick={() => { this.setState({ selectedAlbum: album }); this.setYouTubeVisibility(false) }} />)}
             </div>
         }
