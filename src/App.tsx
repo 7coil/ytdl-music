@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect, DispatchProp } from 'react-redux';
 import { HashRouter, Route, Switch } from 'react-router-dom';
+import { IconButton } from 'react-uwp/IconButton';
 import NavigationView from 'react-uwp/NavigationView';
 import { getTheme, Theme as UWPThemeProvider } from 'react-uwp/Theme';
 import { Album } from './class/Album';
@@ -35,27 +36,39 @@ class App extends Component<DispatchProp, { page: string }> {
     }
   }
   render() {
+    const topIcon = (
+      <IconButton>
+        menu
+      </IconButton>
+    )
+
     const topNodes = [
-      <SplitViewCommandLink to="/" label="Landing" icon={"\uE80F"} />,
-      <SplitViewCommandLink to="/youtube" label="YouTube Music" icon={"\uE721"} />,
-      <SplitViewCommandLink to="/albums" label="Discovered Albums" icon={"\uE90B"} />,
+      <SplitViewCommandLink to="/" label="Landing" icon="home" />,
+      <SplitViewCommandLink to="/youtube" label="YouTube Music" icon="play_arrow" />,
+      <SplitViewCommandLink to="/albums" label="Discovered Albums" icon="playlist_play" />,
     ]
 
     const bottomNodes = [
-      <SplitViewCommandLink to="/settings" label="Settings" icon={"\uE713"} />,
+      <SplitViewCommandLink to="/settings" label="Settings" icon="tune" />,
     ]
+
+    const theme = getTheme({
+      themeName: 'dark',
+      useFluentDesign: false,
+    })
+
+    theme.fonts.segoeMDL2Assets = 'Material Icons';
 
     return (
       <HashRouter>
         <UWPThemeProvider
-          theme={getTheme({
-            themeName: 'dark',
-            useFluentDesign: false
-          })}
+          theme={theme}
+          enableCDN={false}
         >
           <NavigationView
             pageTitle="ytdl-music"
             focusNavigationNodeIndex={0}
+            topIcon={topIcon}
             navigationTopNodes={topNodes}
             navigationBottomNodes={bottomNodes}
             displayMode="compact"

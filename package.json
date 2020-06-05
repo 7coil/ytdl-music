@@ -21,6 +21,7 @@
   "dependencies": {
     "autoprefixer": "^9.7.6",
     "ffmpeg-static": "^4.1.1",
+    "material-icons": "^0.3.1",
     "parcel-bundler": "^1.12.4",
     "postcss-modules": "^2.0.0",
     "react": "^16.13.1",
@@ -28,7 +29,7 @@
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
-    "react-uwp": "^1.3.2",
+    "react-uwp": "7coil/react-uwp-build",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "sanitize-filename": "^1.6.3",

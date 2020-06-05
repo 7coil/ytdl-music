@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { Button } from 'react-uwp/Button';
+import { DropDownMenu } from 'react-uwp/DropDownMenu';
 import { ListView } from 'react-uwp/ListView';
 import { TextBox } from 'react-uwp/TextBox';
-import { DropDownMenu } from 'react-uwp/DropDownMenu';
 import { AlbumInterface } from '../../class/Album';
 import { PageContainer } from '../../components/PageContainer';
 import { RootStateInterface } from '../../components/ReduxProvider';
 import { displayYouTube } from '../../helpers/displayYouTube';
 import { defaultGenres } from '../../helpers/genres';
+import { ContentDialog } from 'react-uwp/ContentDialog';
 
 const PLEASE_SELECT = '';
 
@@ -18,7 +20,7 @@ const mapStateToProps = (state: RootStateInterface) => {
 const connector = connect(mapStateToProps)
 type PropsFromRedux = ConnectedProps<typeof connector>
 
-class AlbumsPage extends Component<PropsFromRedux, { selectedAlbum: AlbumInterface, overwriteArtist: string, overwriteAlbumTitle: string, genre: string }> {
+class AlbumsPage extends Component<PropsFromRedux, { selectedAlbum: AlbumInterface, overwriteArtist: string, overwriteAlbumTitle: string, genre: string, downloadDialog: boolean }> {
   private overwriteAlbumTitleRef = React.createRef<TextBox>();
   private overwriteArtistRef = React.createRef<TextBox>();
 
@@ -34,6 +36,7 @@ class AlbumsPage extends Component<PropsFromRedux, { selectedAlbum: AlbumInterfa
       overwriteArtist: '',
       overwriteAlbumTitle: '',
       genre: '',
+      downloadDialog: false,
     }
   }
   componentDidMount() {
@@ -104,6 +107,8 @@ class AlbumsPage extends Component<PropsFromRedux, { selectedAlbum: AlbumInterfa
           <>
             <p>{selectedAlbum.title}</p>
             <p>{selectedAlbum.artist}</p>
+            <h3>Actions</h3>
+            <Button>Download</Button>
             <h3>Metadata</h3>
             <p>
               Album Title
@@ -151,6 +156,12 @@ class AlbumsPage extends Component<PropsFromRedux, { selectedAlbum: AlbumInterfa
             </table>
           </>
         }
+
+        <ContentDialog
+          title="Downloading..."
+          content="Please wait..."
+          defaultShow={this.state.downloadDialog}
+        />
       </PageContainer>
     )
   }
