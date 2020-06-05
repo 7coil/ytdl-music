@@ -60,6 +60,7 @@ class App extends Component<DispatchProp, { page: string }> {
             navigationBottomNodes={bottomNodes}
             displayMode="compact"
             autoResize={false}
+            style={{height: '100vh'}}
           >
             <Switch>
               <Route exact path="/" component={LandingPage} />
