@@ -1,10 +1,11 @@
 import { INSERT_ALBUM, CLEAR_ALBUMS } from '../actions/album';
-import { Album } from '../../../class/Album'
+import { Album, AlbumInterface } from '../../../class/Album'
+import { testPayloads } from '../../../payloads'
 
 const albumReducer = (state: {
-  albums: Album[]
+  albums: AlbumInterface[]
 } = {
-  albums: []
+  albums: [] as AlbumInterface[]
 }, action) => {
   switch(action.type) {
     case INSERT_ALBUM:
