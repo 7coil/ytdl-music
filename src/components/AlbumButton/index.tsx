@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
+import { AlbumInterface } from '../../class/Album';
 import styles from './index.module.scss';
-import { Album } from '../../class/Album';
 
-class AlbumButton extends Component<{ album?: Album, title?: string, artist?: string, selected: boolean, [key: string]: any }> {
+class AlbumButton extends Component<{ album?: AlbumInterface, title?: string, artist?: string, selected?: boolean, [key: string]: any }> {
   render() {
     return (
       <div className={`${styles.button} ${this.props.selected ? styles.selected: ''}`} {...this.props}>
@@ -13,6 +13,4 @@ class AlbumButton extends Component<{ album?: Album, title?: string, artist?: st
   }
 }
 
-export {
-  AlbumButton
-}
+export { AlbumButton };

@@ -1,4 +1,10 @@
-class AlbumCover {
+interface AlbumCoverInterface {
+  url: string
+  width: number
+  height: number
+}
+
+class AlbumCover implements AlbumCoverInterface {
   url: string
   width: number
   height: number
@@ -7,11 +13,7 @@ class AlbumCover {
     url,
     width,
     height
-  }: {
-    url: string,
-    width: number,
-    height: number
-  }) {
+  }: AlbumCoverInterface) {
     this.url = url;
     this.width = width;
     this.height = height;
@@ -23,5 +25,6 @@ class AlbumCover {
 }
 
 export {
-  AlbumCover
+  AlbumCover,
+  AlbumCoverInterface
 }

@@ -1,7 +1,17 @@
 import { getAlbumsFromData, checkDataForAlbum, checkDataForMutations, getSongsFromData } from "../helpers/mutations";
 import { makeReleaseString } from '../helpers/makeReleaseString';
-import { Song } from "./Song";
-import { AlbumCover } from "./AlbumCover";
+import { Song, SongInterface } from "./Song";
+import { AlbumCover, AlbumCoverInterface } from "./AlbumCover";
+
+interface AlbumInterface {
+  title: string
+  artist: string
+  songs: SongInterface[]
+  albumCovers: AlbumCoverInterface[]
+  releaseYear: number
+  releaseMonth: number
+  releaseDay: number
+}
 
 class Album {
   title: string
@@ -146,5 +156,6 @@ class Album {
 }
 
 export {
-  Album
+  Album,
+  AlbumInterface
 }

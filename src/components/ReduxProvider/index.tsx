@@ -1,16 +1,23 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import { createStore } from './store';
+import { configureStore } from './store';
+import { AlbumInterface } from '../../class/Album';
 
 class ReduxProvider extends Component {
   render() {
     return (
-      <Provider store={createStore()}>
+      <Provider store={configureStore()}>
         {this.props.children}
       </Provider>
     )
   }
 }
 
-export { ReduxProvider };
+interface RootStateInterface {
+  albums: {
+    albums: AlbumInterface[]
+  }
+}
+
+export { ReduxProvider, RootStateInterface };
 

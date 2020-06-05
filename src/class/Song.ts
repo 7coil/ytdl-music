@@ -1,11 +1,24 @@
 import { Album } from "./Album";
-import { AlbumCover } from './AlbumCover';
+import { AlbumCover, AlbumCoverInterface } from './AlbumCover';
 import sanitiseFilename from 'sanitize-filename';
 
-class Song {
-  album: Album
+interface SongInterface {
   id: string
   title: string
+  album: string
+  date: string
+  trackNumber: number
+  artist: string
+  videoID: string
+  audioID: string
+  albumCovers: AlbumCoverInterface[]
+}
+
+class Song implements SongInterface {
+  id: string
+  title: string
+  album: string
+  date: string
   trackNumber: number
   artist: string
   videoID: string
@@ -14,8 +27,9 @@ class Song {
 
   constructor({
     id,
-    album,
     title,
+    album,
+    date,
     trackNumber,
     artist,
     videoID,
@@ -23,8 +37,9 @@ class Song {
     albumCovers,
   }: {
     id: string,
-    album: Album,
     title: string,
+    album: string,
+    date: string,
     trackNumber: number,
     artist: string,
     videoID: string,
@@ -34,6 +49,7 @@ class Song {
     this.id = id;
     this.title = title;
     this.album = album;
+    this.date = date;
     this.trackNumber = trackNumber;
     this.artist = artist;
     this.videoID = videoID;
@@ -58,8 +74,9 @@ class Song {
 
     return new Song({
       id: mutation.id,
-      album: parent,
       title: mutation.title,
+      album: parent.title,
+      date: parent.getReleaseString(),
       trackNumber: parseInt(mutation.albumTrackIndex, 10),
       artist: mutation.artistNames,
       videoID,
@@ -73,10 +90,10 @@ class Song {
   }) {
     return Object.assign({}, {
       title: this.title,
-      album: this.album.title,
+      album: this.album,
       track: this.trackNumber,
       artist: this.artist,
-      date: this.album.getReleaseString(),
+      date: this.date,
     }, additionalMetadata)
   }
 
@@ -177,5 +194,6 @@ class Song {
 }
 
 export {
-  Song
+  Song,
+  SongInterface
 }

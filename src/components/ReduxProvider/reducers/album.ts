@@ -19,3 +19,7 @@ const albumReducer = (state: {
       return state;
   }
 }
+
+export {
+  albumReducer
+}

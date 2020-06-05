@@ -1,7 +1,7 @@
 export const INSERT_ALBUM = 'INSERT_ALBUM';
 export const CLEAR_ALBUMS = 'CLEAR_ALBUMS';
 
-export const insertAlbums = (data) => {
+export const insertAlbum = (data) => {
   return {
     type: INSERT_ALBUM,
     data
