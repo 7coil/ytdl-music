@@ -20,8 +20,6 @@ const createWindow = () => {
     }
   })
 
-  ytdlMusicWindow.addBrowserView(youtubeView);
-
   // and load the index.html of the app.
   youtubeView.webContents.loadURL('https://music.youtube.com/')
 
