@@ -1,6 +1,6 @@
 {
   "name": "ytdl-music",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "./.webpack/main",
   "license": "MIT",
   "author": {
