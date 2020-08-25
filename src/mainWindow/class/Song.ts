@@ -109,8 +109,9 @@ class Song implements SongInterface {
 
     return new Promise((resolve, reject) => {
       const downloadStream = ytdl(this.audioID, { quality: 'highestaudio' })
+      const writeStream = fs.createWriteStream(downloadPath)
 
-      downloadStream.pipe(fs.createWriteStream(downloadPath))
+      downloadStream.pipe(writeStream)
 
       downloadStream.on('error', (e) => {
         console.log(e)
@@ -125,6 +126,7 @@ class Song implements SongInterface {
 
       downloadStream.on('end', () => {
         if (typeof setStatus === 'function' && typeof index === 'number') setStatus(`Downloaded ${this.title}`, index)
+        writeStream.close()
         resolve();
       })
     })
@@ -151,7 +153,17 @@ class Song implements SongInterface {
 
       if (typeof setStatus === 'function' && typeof index === 'number') setStatus(`Converting ${this.title}...`, index)
 
-      const ffmpeg = childProcess.spawn(path.resolve('resources', 'ffmpeg.exe'), [
+      const ffmpegPath = [
+        path.resolve('node_modules', 'ffmpeg-static', 'ffmpeg.exe'),
+        path.resolve('node_modules', 'ffmpeg-static', 'ffmpeg'),
+        path.resolve('resources', 'ffmpeg.exe'),
+        path.resolve('resources', 'ffmpeg')
+      ]
+        .find(path => fs.existsSync(path))
+
+      if (!ffmpegPath) return reject(new Error('Could not find FFMPEG!'))
+
+      const ffmpeg = childProcess.spawn(ffmpegPath, [
         '-y',
         '-i', downloadPath,
         '-i', albumCoverPath,
