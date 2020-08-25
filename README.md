@@ -1,29 +1,27 @@
 # ytdl-music
-An electron frontend for `ytdl-core` for YouTube Music.
+An electron frontend for `ytdl-core` and `ffmpeg` for YouTube Music.
 
-- Downloads regular music
-    - Does not download audio from Music Video
+- Downloads Songs
+    - Does not rip the audio from Music Video
 - Embeds Song Number within Album
 - Embeds Album Artist
 - Embeds Album Cover
 - Embeds Song Release Date
 - Embeds Genre
+- Converts to `.mp3` for convenience
 
 ## Usage
-1. Open a command prompt
-2. Clone this folder, and move into it
-3. `yarn` to install dependencies
-4. `yarn build` to turn the code into a webpage
-5. `yarn start` to start the application
+1. Download and install the `.exe` in the GitHub releases section
+2. Navigate to the page in the YouTube Music tab
+    - Note that the "discovered albums" count increases in the bottom left hand corner
+3. Select the album in the "Discovered Albums" tab
+4. Click on Download
 
-## Preview
-The first 30 seconds of this clip is useful.
-The rest is just waiting.
-![](.github/convert.gif)
+## Screenshots
+![](.github/ytdl-music_ai3X4cUtrC.png)
 
-> Sovereign Kevin MacLeod (incompetech.com)  
-> Licensed under Creative Commons: By Attribution 3.0 License  
-> http://creativecommons.org/licenses/by/3.0/
+![](.github/ytdl-music_pSzFrZQ32B.png)
+
 
 ## Help
 For support, try [my discord server](https://discordapp.com/invite/wHgdmf4).
