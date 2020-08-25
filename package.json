@@ -1,38 +1,114 @@
 {
   "name": "ytdl-music",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "./.webpack/main",
   "license": "MIT",
   "devDependencies": {
+    "@electron-forge/cli": "6.0.0-beta.52",
+    "@electron-forge/maker-deb": "6.0.0-beta.52",
+    "@electron-forge/maker-rpm": "6.0.0-beta.52",
+    "@electron-forge/maker-squirrel": "6.0.0-beta.52",
+    "@electron-forge/maker-zip": "6.0.0-beta.52",
+    "@electron-forge/plugin-webpack": "^6.0.0-beta.52",
+    "@marshallofsound/webpack-asset-relocator-loader": "^0.5.0",
     "@types/react": "^16.9.34",
     "@types/react-dom": "^16.9.6",
     "@types/react-redux": "^7.1.9",
+    "@typescript-eslint/eslint-plugin": "^2.18.0",
+    "@typescript-eslint/parser": "^2.18.0",
     "cross-env": "^7.0.2",
-    "electron": "^8.2.3",
+    "css-loader": "^3.0.0",
+    "dart-sass": "^1.25.0",
+    "electron": "^9.1.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-import": "^2.20.0",
+    "eslint-plugin-react": "^7.20.6",
+    "fork-ts-checker-webpack-plugin": "^3.1.1",
+    "node-loader": "^0.6.0",
     "sass": "^1.26.5",
+    "sass-loader": "^9.0.2",
+    "style-loader": "^0.23.1",
+    "ts-loader": "^6.2.1",
     "typescript": "^3.8.3"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=production electron .",
-    "start:dev": "cross-env NODE_ENV=development electron .",
-    "build": "parcel build src/index.html --public-url ./",
-    "watch": "parcel src/index.html"
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish",
+    "lint": "eslint --ext .ts ."
   },
   "dependencies": {
+    "@types/node-fetch": "^2.5.7",
+    "@types/react-router-dom": "^5.1.5",
     "autoprefixer": "^9.7.6",
+    "electron-squirrel-startup": "^1.0.0",
     "ffmpeg-static": "^4.1.1",
+    "file-loader": "^6.0.0",
     "material-icons": "^0.3.1",
-    "parcel-bundler": "^1.12.4",
+    "node-fetch": "^2.6.0",
     "postcss-modules": "^2.0.0",
     "react": "^16.13.1",
     "react-desktop": "^0.3.9",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
-    "react-uwp": "7coil/react-uwp-build",
+    "react-uwp": "^1.3.3",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "sanitize-filename": "^1.6.3",
     "ytdl-core": "^2.1.1"
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "ytdl_music"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ],
+      "plugins": [
+        [
+          "@electron-forge/plugin-webpack",
+          {
+            "mainConfig": "./webpack.main.config.js",
+            "renderer": {
+              "config": "./webpack.renderer.config.js",
+              "entryPoints": [
+                {
+                  "html": "./src/mainWindow/index.html",
+                  "js": "./src/mainWindow/renderer.tsx",
+                  "name": "main_window"
+                },
+                {
+                  "js": "./src/youtubeMusic/renderer.tsx",
+                  "preload": {
+                    "js": "./src/youtubeMusic/preload.ts"
+                  },
+                  "name": "youtube_music"
+                }
+              ]
+            }
+          }
+        ]
+      ]
+    }
   }
 }

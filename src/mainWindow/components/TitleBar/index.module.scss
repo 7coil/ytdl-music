@@ -1,0 +1,44 @@
+.titleBarContainer {
+  background-color: rgba(255, 255, 255, 0.25);
+  height: 30px;
+  
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+}
+
+.titleBarDragRegion {
+  margin-top: 1px;
+  margin-right: 1px;
+  -webkit-app-region: drag;
+  display: flex;
+  align-items: center;
+  padding-left: .75em;
+  // justify-content: center;
+}
+
+.titleBarButton {
+  grid-row: 1;
+  font-size: 10px !important;
+  height: 30px !important;
+  width: 46px !important;
+}
+
+.titleBarMinimise {
+  grid-column: 2;
+}
+
+.titleBarMaximise, .titleBarRestore {
+  grid-column: 3;
+}
+
+.titleBarClose {
+  grid-column: 4;
+
+  &:hover {
+    background-color: #E81123 !important;
+  }
+
+  &:active {
+    background-color: #F1707A !important;
+  }
+}

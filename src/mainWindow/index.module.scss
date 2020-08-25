@@ -1,0 +1,11 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.navigationViewRoot {
+  height: unset;
+  flex-grow: 1;
+  overflow: hidden;
+}

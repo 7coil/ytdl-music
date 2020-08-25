@@ -1,14 +1,22 @@
 {
   "compilerOptions": {
-    "jsx": "react",
+    "allowJs": true,
+    "module": "commonjs",
+    "skipLibCheck": true,
     "esModuleInterop": true,
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "outDir": "dist",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
-    "lib": [
-      "ES2019",
-      "DOM"
-    ],
-    "files": [
-      "node_modules/react-uwp/index.d.ts"
-    ]
-  }
+    "paths": {
+      "*": ["node_modules/*"]
+    },
+    "jsx": "react"
+  },
+  "include": [
+    "src/**/*",
+    "declaration.d.ts"
+  ]
 }
