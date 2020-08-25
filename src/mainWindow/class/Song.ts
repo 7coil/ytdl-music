@@ -1,6 +1,10 @@
 import { Album } from "./Album";
 import { AlbumCover, AlbumCoverInterface } from './AlbumCover';
 import sanitiseFilename from 'sanitize-filename';
+import ytdl from 'ytdl-core';
+import path from 'path';
+import fs from 'fs';
+import childProcess from 'child_process';
 
 interface SongInterface {
   id: string;
@@ -35,17 +39,7 @@ class Song implements SongInterface {
     videoID,
     audioID,
     albumCovers,
-  }: {
-    id: string;
-    title: string;
-    album: string;
-    date: string;
-    trackNumber: number;
-    artist: string;
-    videoID: string;
-    audioID: string;
-    albumCovers: AlbumCover[];
-  }) {
+  }: SongInterface) {
     this.id = id;
     this.title = title;
     this.album = album;
@@ -54,7 +48,12 @@ class Song implements SongInterface {
     this.artist = artist;
     this.videoID = videoID;
     this.audioID = audioID;
-    this.albumCovers = albumCovers;
+
+    if (Array.isArray(albumCovers)) {
+      this.albumCovers = albumCovers.map(albumCover => new AlbumCover(albumCover))
+    } else {
+      this.albumCovers = []
+    }
   }
 
   getSmallestAlbumCover(): AlbumCover {
@@ -106,10 +105,6 @@ class Song implements SongInterface {
     setStatus?: (newString: string, index?: number) => any;
     index?: number;
   }) {
-    const ytdl = window.require('ytdl-core');
-    const path = window.require('path');
-    const fs = window.require('fs');
-
     const downloadPath = path.join(location, this.getSafeFileName() + '.ogg')
 
     return new Promise((resolve, reject) => {
@@ -146,21 +141,17 @@ class Song implements SongInterface {
     setStatus?: (newString: string, index?: number) => any;
     index?: number;
   }) {
-    const path = window.require('path');
-    const ffmpegPath = window.require('ffmpeg-static');
-    const childProcess = window.require('child_process');
-
     const albumCoverPath = path.join(location, 'cover.jpg')
     const downloadPath = path.join(location, this.getSafeFileName() + '.ogg')
     const convertPath = path.join(location, this.getSafeFileName() + '.mp3')
     const metadata = this.getFFMPEGMetadata(additionalMetadata);
-    
+
     return new Promise((resolve, reject) => {
       let log = '';
 
       if (typeof setStatus === 'function' && typeof index === 'number') setStatus(`Converting ${this.title}...`, index)
 
-      const ffmpeg = childProcess.spawn(ffmpegPath, [
+      const ffmpeg = childProcess.spawn(path.resolve('resources', 'ffmpeg.exe'), [
         '-y',
         '-i', downloadPath,
         '-i', albumCoverPath,
@@ -172,8 +163,7 @@ class Song implements SongInterface {
         ...Object.entries(metadata).map(([key, value]) => ['-metadata', `${key}=${value}`]).flat(),
         convertPath,
       ], {
-        windowsVerbatimArguments: false,
-        encoding: 'UTF-8'
+        windowsVerbatimArguments: false
       })
 
       ffmpeg.stderr.on('data', (data) => {

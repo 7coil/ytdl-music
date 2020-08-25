@@ -3,6 +3,12 @@
   "version": "1.0.0",
   "main": "./.webpack/main",
   "license": "MIT",
+  "author": {
+    "email": "github@leondrolio.com",
+    "name": "Leondro Lio",
+    "url": "https://leondrolio.com/"
+  },
+  "description": "A YouTube Music downloader graphical user interface",
   "devDependencies": {
     "@electron-forge/cli": "6.0.0-beta.52",
     "@electron-forge/maker-deb": "6.0.0-beta.52",
@@ -60,55 +66,6 @@
     "ytdl-core": "^2.1.1"
   },
   "config": {
-    "forge": {
-      "packagerConfig": {},
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "ytdl_music"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ],
-      "plugins": [
-        [
-          "@electron-forge/plugin-webpack",
-          {
-            "mainConfig": "./webpack.main.config.js",
-            "renderer": {
-              "config": "./webpack.renderer.config.js",
-              "entryPoints": [
-                {
-                  "html": "./src/mainWindow/index.html",
-                  "js": "./src/mainWindow/renderer.tsx",
-                  "name": "main_window"
-                },
-                {
-                  "js": "./src/youtubeMusic/renderer.tsx",
-                  "preload": {
-                    "js": "./src/youtubeMusic/preload.ts"
-                  },
-                  "name": "youtube_music"
-                }
-              ]
-            }
-          }
-        ]
-      ]
-    }
+    "forge": "./forge.config.js"
   }
 }

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styles from './index.module.scss';
 import { ConnectedProps, connect } from 'react-redux';
 import { RootStateInterface } from '../ReduxProvider';
-import { AlbumInterface } from 'src/mainWindow/class/Album';
+import { AlbumInterface } from '../../class/Album';
 
 const mapStateToProps = (state: RootStateInterface): { albums: { albums: AlbumInterface[] } } => {
   const { albums } = state;

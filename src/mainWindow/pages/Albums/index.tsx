@@ -10,6 +10,7 @@ import { PageContainer } from '../../components/PageContainer';
 import { RootStateInterface } from '../../components/ReduxProvider';
 import { displayYouTube } from '../../helpers/displayYouTube';
 import { defaultGenres } from '../../helpers/genres';
+import { remote, ipcMain, ipcRenderer } from 'electron';
 
 const PLEASE_SELECT = '';
 
@@ -35,6 +36,7 @@ class AlbumsPage extends Component<PropsFromRedux, { selectedAlbum: AlbumInterfa
     this.handleAlbumTitleOverrideChange = this.handleAlbumTitleOverrideChange.bind(this);
     this.handleGenreChange = this.handleGenreChange.bind(this);
     this.handleDownloadButton = this.handleDownloadButton.bind(this);
+    this.handleDownloadMessage = this.handleDownloadMessage.bind(this);
 
     this.state = {
       selectedAlbum: null,
@@ -64,44 +66,42 @@ class AlbumsPage extends Component<PropsFromRedux, { selectedAlbum: AlbumInterfa
     })
   }
   handleDownloadButton(): void {
-    const dialog = window.require('electron').remote.dialog
-
-    dialog.showOpenDialog({
+    remote.dialog.showOpenDialog({
       properties: ['openDirectory']
     })
       .then((result) => {
-        if (result.cancelled) return;
-        const album = new Album(this.state.selectedAlbum)
-
+        if (result.canceled) return;
+        
         const downloadDirectory = result.filePaths[0];
-
+        
         const additionalMetadata: { [key: string]: string | number } = {};
         if (this.state.overwriteAlbumTitle) additionalMetadata.album = this.state.overwriteAlbumTitle;
         if (this.state.overwriteArtist) additionalMetadata.artist = this.state.overwriteArtist;
         if (this.state.genre) additionalMetadata.genre = this.state.genre;
 
-        album.download({
-          location: downloadDirectory,
-          additionalMetadata,
-          setStatus: (text, number) => {
-            console.log(text, number)
-            let statusText = text
-            if (number) statusText += ` (${number} of ${album.songs.length})`
-            this.setState({
-              downloadStatusText: statusText
-            })
-          }
-        })
-          .then(() => {
-            this.setState({
-              downloadStatus: DOWNLOAD_STATUS.downloaded
-            })
-          })
-
         this.setState({
           downloadStatus: DOWNLOAD_STATUS.downloading
         })
+        
+        ipcRenderer.send('download-album', downloadDirectory, additionalMetadata, this.state.selectedAlbum)
+        ipcRenderer.on('set-status', this.handleDownloadMessage)
+        ipcRenderer.once('downloaded-album', () => {
+          this.setState({
+            downloadStatusText: 'Complete!',
+            downloadStatus: DOWNLOAD_STATUS.downloaded
+          })
+
+          ipcRenderer.removeListener('set-status', this.handleDownloadMessage)
+        })
       })
+  }
+  handleDownloadMessage(e, text: string, number?: number): void {
+    console.log(text, number)
+    let statusText = text
+    if (number) statusText += ` (${number} of ${this.state.selectedAlbum.songs.length})`
+    this.setState({
+      downloadStatusText: statusText
+    })
   }
   render() {
     const { albums } = this.props.albums;

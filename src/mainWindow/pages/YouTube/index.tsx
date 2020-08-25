@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styles from './index.module.scss';
 import { displayYouTube } from '../../helpers/displayYouTube';
 import { ProgressCircle } from 'react-desktop/windows';
+import { remote } from 'electron';
 
 class YouTubePage extends Component {
   private youtubeWebView: React.RefObject<HTMLDivElement> = React.createRef();
@@ -21,9 +22,7 @@ class YouTubePage extends Component {
     cancelAnimationFrame(this.currentFrame);
   }
   handleWindowResize() {
-    if (typeof window.require === 'undefined') return;
-
-    const youtubeView = window.require('electron').remote.getCurrentWindow().getBrowserView();
+    const youtubeView = remote.getCurrentWindow().getBrowserView();
 
     if (youtubeView && this.youtubeWebView.current) {
       const rect = this.youtubeWebView.current.getBoundingClientRect();

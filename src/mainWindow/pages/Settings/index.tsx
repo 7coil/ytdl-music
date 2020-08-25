@@ -10,15 +10,13 @@ import { displayYouTube } from '../../helpers/displayYouTube';
 import { testPayloads } from '../../payloads';
 import styles from './index.module.scss';
 
-const licenceText = readFileSync('LICENCE', 'utf-8')
-
 class SettingsPage extends Component<DispatchProp> {
   constructor(props: DispatchProp) {
     super(props);
     this.injectExamplePayload = this.injectExamplePayload.bind(this);
   }
   injectExamplePayload(): void {
-    const { dispatch } = this.props;
+    const { dispatch } = this.props
     testPayloads
       .map(mutation => Album.createFromMutations(mutation))
       .map(album => dispatch(insertAlbum(album)))
@@ -42,10 +40,6 @@ class SettingsPage extends Component<DispatchProp> {
     displayYouTube(false);
   }
   render(): ReactElement {
-    const licence = licenceText
-      .split('\n\n')
-      .map((text, index) => <p key={index} className={styles.licence}>{text}</p>)
-
     return (
       <PageContainer>
         <h1>Settings</h1>
@@ -61,7 +55,31 @@ class SettingsPage extends Component<DispatchProp> {
         <h2>Developer Actions</h2>
         <Button onClick={this.injectExamplePayload}>Insert Example Payload</Button>
         <h2>Licence</h2>
-        <pre>{licence}</pre>
+        <pre>
+{`
+MIT License
+
+Copyright (c) 2020 Leondro Lio <github@leondrolio.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+`}
+        </pre>
       </PageContainer>
     )
   }

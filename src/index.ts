@@ -1,4 +1,7 @@
 import { app, BrowserWindow, BrowserView, ipcMain } from 'electron';
+import { AlbumInterface, Album } from './mainWindow/class/Album';
+import electronSquirrelStartup from 'electron-squirrel-startup';
+
 declare const YOUTUBE_MUSIC_PRELOAD_WEBPACK_ENTRY: any;
 declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
 
@@ -22,7 +25,6 @@ const createWindow = () => {
 
   // and load the index.html of the app.
   youtubeMusic.webContents.loadURL('https://music.youtube.com/');
-  youtubeMusic.webContents.openDevTools();
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
   ipcMain.on('http-request', (e, data) => {
@@ -40,6 +42,23 @@ const createWindow = () => {
   ipcMain.on('youtube-clicked', () => {
     mainWindow.webContents.send('youtube-clicked');
   });
+
+  ipcMain.on('download-album', (e, location: string, additionalMetadata: { [key: string]: string | number }, album: AlbumInterface) => {
+    const realAlbum = new Album(album);
+
+    realAlbum.download({
+      location,
+      additionalMetadata,
+      setStatus: (str, index) => mainWindow.webContents.send('set-status', str, index)
+    })
+      .then(() => {
+        mainWindow.webContents.send('downloaded-album')
+      })
+  })
 }
 
-app.whenReady().then(createWindow)
+if (electronSquirrelStartup) {
+  app.quit();
+} else {
+  app.whenReady().then(createWindow)
+}

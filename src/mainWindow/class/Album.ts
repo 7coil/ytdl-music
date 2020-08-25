@@ -3,7 +3,9 @@ import { makeReleaseString } from '../helpers/makeReleaseString';
 import { Song, SongInterface } from "./Song";
 import { AlbumCover, AlbumCoverInterface } from "./AlbumCover";
 import { DEFAULT_HEADERS } from '../headers'
-import { remote } from "electron";
+import path from 'path';
+import fs from 'fs';
+import nodeFetch from 'node-fetch';
 
 interface AlbumInterface {
   title: string;
@@ -32,15 +34,7 @@ class Album {
     releaseYear,
     releaseMonth,
     releaseDay,
-  }: {
-    title: string;
-    artist: string;
-    songs?: SongInterface;
-    albumCovers: AlbumCoverInterface[];
-    releaseYear: number;
-    releaseMonth: number;
-    releaseDay: number;
-  }) {
+  }: AlbumInterface) {
     this.title = title;
     this.artist = artist;
     this.albumCovers = albumCovers.map(albumCover => new AlbumCover(albumCover))
@@ -81,14 +75,16 @@ class Album {
 
     const albumData = getAlbumsFromData(mutations)[0];
 
-    const album = new Album({
+    const albumInterfaceData = {
       title: albumData.title,
       artist: albumData.artistDisplayName,
       albumCovers: albumData.thumbnailDetails.thumbnails.map(mutation => new AlbumCover(mutation)),
       releaseYear: albumData.releaseDate.year,
       releaseMonth: albumData.releaseDate.month,
       releaseDay: albumData.releaseDate.day
-    })
+    } as AlbumInterface
+
+    const album = new Album(albumInterfaceData)
 
     album.addSongsFromMutations(mutations);
 
@@ -104,13 +100,9 @@ class Album {
     setStatus?: (newString: string, index?: number) => any;
     index?: number;
   }) {
-    const path = remote.require('path');
-    const fs = remote.require('fs');
-    const nodeFetch = remote.require('node-fetch');
-
-    const downloadPath = path.join(location, 'cover.jpg')
-
     return new Promise((resolve, reject) => {
+      const downloadPath = path.join(location, 'cover.jpg')
+
       if (setStatus) setStatus('Downloading album cover')
       nodeFetch(this.getLargestAlbumCover().url, {
         headers: DEFAULT_HEADERS
