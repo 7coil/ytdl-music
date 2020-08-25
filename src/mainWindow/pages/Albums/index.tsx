@@ -166,6 +166,7 @@ class AlbumsPage extends Component<PropsFromRedux, { selectedAlbum: AlbumInterfa
             <TextBox
               placeholder="Album Title"
               defaultValue={selectedAlbum.title}
+              onChangeValue={this.handleAlbumTitleOverrideChange}
               ref={this.overwriteAlbumTitleRef}
             />
             <p>
