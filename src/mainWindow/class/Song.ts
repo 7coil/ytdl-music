@@ -154,17 +154,18 @@ class Song implements SongInterface {
       if (typeof setStatus === 'function' && typeof index === 'number') setStatus(`Converting ${this.title}...`, index)
 
       const ffmpegPath = [
-        path.resolve('node_modules', 'ffmpeg-static', 'ffmpeg.exe'),
         path.resolve('node_modules', 'ffmpeg-static', 'ffmpeg'),
-        path.resolve('resources', 'ffmpeg.exe'),
         path.resolve('resources', 'ffmpeg')
       ]
+        // Add .exe to the end if we are on Microsoft Windows
+        .map(path => process.platform === 'win32' ? path + '.exe' : path)
         .find(path => fs.existsSync(path))
 
       if (!ffmpegPath) return reject(new Error('Could not find FFMPEG!'))
 
-      const ffmpeg = childProcess.spawn(ffmpegPath, [
+      const args = [
         '-y',
+        '-loglevel', 'verbose',
         '-i', downloadPath,
         '-i', albumCoverPath,
         '-map', '0:0',
@@ -174,7 +175,9 @@ class Song implements SongInterface {
         '-metadata', 'comment="Cover (front)"',
         ...Object.entries(metadata).map(([key, value]) => ['-metadata', `${key}=${value}`]).flat(),
         convertPath,
-      ], {
+      ]
+
+      const ffmpeg = childProcess.spawn(ffmpegPath, args, {
         windowsVerbatimArguments: false
       })
 
@@ -188,7 +191,7 @@ class Song implements SongInterface {
           resolve();
         } else {
           if (typeof setStatus === 'function' && typeof index === 'number') setStatus(`Error while converting: ${log}`, index)
-          reject(new Error(`An FFMPEG error has occurred:\n${log}`))
+          reject(new Error(`An FFMPEG error has occurred:\n${ffmpegPath} + ${JSON.stringify(args)}\n\n${log}`))
         }
       });
     })
