@@ -41,6 +41,8 @@ jobs:
       - name: Install Ubuntu dependencies
         if: matrix.config.os == 'ubuntu-latest'
         run: sudo apt-get install fakeroot dpkg rpm
+      - name: Install project dependencies
+        run: npm install
       - name: Run electron-forge
         run: npm run make
       - name: Upload artifact on Windows
