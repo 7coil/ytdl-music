@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
+import React, { Component, ReactElement } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Button } from 'react-uwp/Button';
 import { ContentDialog } from 'react-uwp/ContentDialog';
 import { DropDownMenu } from 'react-uwp/DropDownMenu';
 import { ListView } from 'react-uwp/ListView';
 import { TextBox } from 'react-uwp/TextBox';
-import { AlbumInterface, Album } from '../../class/Album';
+import { AlbumInterface } from '../../class/Album';
 import { PageContainer } from '../../components/PageContainer';
 import { RootStateInterface } from '../../components/ReduxProvider';
 import { displayYouTube } from '../../helpers/displayYouTube';
 import { defaultGenres } from '../../helpers/genres';
-import { remote, ipcMain, ipcRenderer } from 'electron';
+import { remote, ipcRenderer } from 'electron';
 
 const PLEASE_SELECT = '';
 
@@ -47,20 +47,20 @@ class AlbumsPage extends Component<PropsFromRedux, { selectedAlbum: AlbumInterfa
       downloadStatusText: 'Downloading...',
     }
   }
-  componentDidMount() {
+  componentDidMount(): void {
     displayYouTube(false);
   }
-  handleArtistOverrideChange(value: string) {
+  handleArtistOverrideChange(value: string): void {
     this.setState({
       overwriteArtist: value
     })
   }
-  handleAlbumTitleOverrideChange(value: string) {
+  handleAlbumTitleOverrideChange(value: string): void {
     this.setState({
       overwriteAlbumTitle: value
     })
   }
-  handleGenreChange(value: string) {
+  handleGenreChange(value: string): void {
     this.setState({
       genre: value
     })
@@ -71,9 +71,9 @@ class AlbumsPage extends Component<PropsFromRedux, { selectedAlbum: AlbumInterfa
     })
       .then((result) => {
         if (result.canceled) return;
-        
+
         const downloadDirectory = result.filePaths[0];
-        
+
         const additionalMetadata: { [key: string]: string | number } = {};
         if (this.state.overwriteAlbumTitle) additionalMetadata.album = this.state.overwriteAlbumTitle;
         if (this.state.overwriteArtist) additionalMetadata.artist = this.state.overwriteArtist;
@@ -82,7 +82,7 @@ class AlbumsPage extends Component<PropsFromRedux, { selectedAlbum: AlbumInterfa
         this.setState({
           downloadStatus: DOWNLOAD_STATUS.downloading
         })
-        
+
         ipcRenderer.send('download-album', downloadDirectory, additionalMetadata, this.state.selectedAlbum)
         ipcRenderer.on('set-status', this.handleDownloadMessage)
         ipcRenderer.once('downloaded-album', () => {
@@ -103,7 +103,7 @@ class AlbumsPage extends Component<PropsFromRedux, { selectedAlbum: AlbumInterfa
       downloadStatusText: statusText
     })
   }
-  render() {
+  render(): ReactElement {
     const { albums } = this.props.albums;
     const { selectedAlbum } = this.state
 
