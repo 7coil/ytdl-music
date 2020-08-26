@@ -1,0 +1,58 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Build Electron Project
+
+on: 'push'
+
+jobs:
+  # create_release:
+  #   name: Create Release
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+  #   steps:
+  #     - name: Create Release
+  #       id: create_release
+  #       uses: actions/create-release@v1
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       with:
+  #         tag_name: ${{ github.ref }}
+  #         release_name: Release ${{ github.ref }}
+  #         draft: false
+  #         prerelease: false
+
+  build:
+    name: Build Release
+    needs: create_release
+    runs-on: ${{ matrix.platform }}
+    strategy:
+      matrix:
+        platform: 
+          - ubuntu-latest
+          - windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node.js 14
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install Ubuntu dependencies
+        if: matrix.config.os == 'ubuntu-latest'
+        run: sudo apt-get install fakeroot dpkg rpm
+      - name: Run electron-forge
+        run: npm make
+      - name: Upload artifact on Windows
+        uses: actions/upload-artifact@v1
+        if: matrix.config.os == 'windows-latest'
+        with:
+          upload_url: windows-build
+          path: ./out/make/*
+      - name: Upload artifact on Ubuntu
+        uses: actions/upload-artifact@v1
+        if: matrix.config.os == 'ubuntu-latest'
+        with:
+          upload_url: ubuntu-build
+          path: ./out/make/*
