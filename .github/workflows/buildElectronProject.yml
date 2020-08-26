@@ -49,11 +49,11 @@ jobs:
         uses: actions/upload-artifact@v1
         if: matrix.platform == 'windows-latest'
         with:
-          upload_url: windows-build
+          name: windows-build
           path: ./out/make/*
       - name: Upload artifact on Ubuntu
         uses: actions/upload-artifact@v1
         if: matrix.platform == 'ubuntu-latest'
         with:
-          upload_url: ubuntu-build
+          name: ubuntu-build
           path: ./out/make/*
