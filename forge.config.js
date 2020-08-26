@@ -1,59 +1,60 @@
-const fs = require('fs')
-const path = require('path')
+const fs = require('fs');
+const path = require('path');
+const ffmpegPath = require('ffmpeg-static');
 
 module.exports = {
-  "packagerConfig": {
+  packagerConfig: {
     afterExtract: [
       (extractPath, electronVersion, platform, arch, done) => {
         fs.copyFileSync(
-          path.resolve(require.resolve('ffmpeg-static'), '..', 'ffmpeg.exe'),
-          path.resolve(extractPath, 'resources', 'ffmpeg.exe')
+          ffmpegPath,
+          path.resolve(extractPath, 'resources', path.basename(ffmpegPath))
         )
         done()
       }
     ]
   },
-  "makers": [
+  makers: [
     {
-      "name": "@electron-forge/maker-squirrel",
-      "config": {
-        "name": "ytdl_music"
+      name: '@electron-forge/maker-squirrel',
+      config: {
+        name: 'ytdl_music'
       }
     },
     {
-      "name": "@electron-forge/maker-zip",
-      "platforms": [
-        "darwin"
+      name: '@electron-forge/maker-zip',
+      platforms: [
+        'darwin'
       ]
     },
     {
-      "name": "@electron-forge/maker-deb",
-      "config": {}
+      name: '@electron-forge/maker-deb',
+      config: {}
     },
     {
-      "name": "@electron-forge/maker-rpm",
-      "config": {}
+      name: '@electron-forge/maker-rpm',
+      config: {}
     }
   ],
-  "plugins": [
+  plugins: [
     [
-      "@electron-forge/plugin-webpack",
+      '@electron-forge/plugin-webpack',
       {
-        "mainConfig": "./webpack.main.config.js",
-        "renderer": {
-          "config": "./webpack.renderer.config.js",
-          "entryPoints": [
+        mainConfig: './webpack.main.config.js',
+        renderer: {
+          config: './webpack.renderer.config.js',
+          entryPoints: [
             {
-              "html": "./src/mainWindow/index.html",
-              "js": "./src/mainWindow/renderer.tsx",
-              "name": "main_window"
+              html: './src/mainWindow/index.html',
+              js: './src/mainWindow/renderer.tsx',
+              name: 'main_window'
             },
             {
-              "js": "./src/youtubeMusic/renderer.tsx",
-              "preload": {
-                "js": "./src/youtubeMusic/preload.ts"
+              js: './src/youtubeMusic/renderer.tsx',
+              preload: {
+                js: './src/youtubeMusic/preload.ts'
               },
-              "name": "youtube_music"
+              name: 'youtube_music'
             }
           ]
         }
