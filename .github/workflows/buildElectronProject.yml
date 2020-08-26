@@ -39,7 +39,7 @@ jobs:
         with:
           node-version: 14
       - name: Install Ubuntu dependencies
-        if: matrix.config.os == 'ubuntu-latest'
+        if: matrix.platform == 'ubuntu-latest'
         run: sudo apt-get install fakeroot dpkg rpm
       - name: Install project dependencies
         run: npm install
@@ -47,13 +47,13 @@ jobs:
         run: npm run make
       - name: Upload artifact on Windows
         uses: actions/upload-artifact@v1
-        if: matrix.config.os == 'windows-latest'
+        if: matrix.platform == 'windows-latest'
         with:
           upload_url: windows-build
           path: ./out/make/*
       - name: Upload artifact on Ubuntu
         uses: actions/upload-artifact@v1
-        if: matrix.config.os == 'ubuntu-latest'
+        if: matrix.platform == 'ubuntu-latest'
         with:
           upload_url: ubuntu-build
           path: ./out/make/*
