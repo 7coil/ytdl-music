@@ -98,7 +98,7 @@ class AlbumsPage extends Component<PropsFromRedux, { selectedAlbum: AlbumInterfa
   handleDownloadMessage(e, text: string, number?: number): void {
     console.log(text, number)
     let statusText = text
-    if (number) statusText += ` (${number} of ${this.state.selectedAlbum.songs.length})`
+    if (number) statusText += ` (${number + 1} of ${this.state.selectedAlbum.songs.length})`
     this.setState({
       downloadStatusText: statusText
     })

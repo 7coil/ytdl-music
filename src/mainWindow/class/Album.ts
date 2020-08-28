@@ -94,11 +94,9 @@ class Album {
   downloadAlbumCover({
     location,
     setStatus,
-    index,
   }: {
     location: string;
     setStatus?: (newString: string, index?: number) => any;
-    index?: number;
   }) {
     return new Promise((resolve, reject) => {
       const downloadPath = path.join(location, 'cover.jpg')
@@ -119,11 +117,11 @@ class Album {
           let bytes = 0;
           res.body.on('data', (chunk) => {
             bytes += chunk.length;
-            if (typeof setStatus === 'function' && typeof index === 'number') setStatus(`Downloaded ${Math.round(bytes / 1024)}KB of Album Cover`, index);
+            if (typeof setStatus === 'function') setStatus(`Downloaded ${Math.round(bytes / 1024)}KB of Album Cover`);
           })
 
           res.body.on('end', () => {
-            if (typeof setStatus === 'function' && typeof index === 'number') setStatus(`Downloaded Album Cover`, index)
+            if (typeof setStatus === 'function') setStatus(`Downloaded Album Cover`)
             resolve();
           })
         })
@@ -147,7 +145,7 @@ class Album {
       try {
         const ffmpegInstances: Promise<any>[] = [] as Promise<any>[];
 
-        await this.downloadAlbumCover({ location, setStatus, index: this.songs.length })
+        await this.downloadAlbumCover({ location, setStatus })
 
         for (let i = 0; i < this.songs.length; i += 1) {
           const song = this.songs[i];
