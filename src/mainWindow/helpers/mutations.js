@@ -13,7 +13,7 @@ const getSongsFromData = (data) => {
 }
 
 const checkDataForAlbum = (data) => {
-  return getAlbumsFromData(data).length === 1 && getSongsFromData.length > 0
+  return getAlbumsFromData(data).length === 1 && getSongsFromData(data).length > 0
 }
 
 export {
