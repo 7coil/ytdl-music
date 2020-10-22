@@ -69,7 +69,9 @@ class Song implements SongInterface {
   }
 
   static createFromMutation(parent: Album, mutation: any): Song | void {
-    const [, videoID, audioID] = /([a-zA-Z0-9_-]{11})\|([a-zA-Z0-9_-]{11})/.exec(atob(decodeURIComponent(mutation.audioModeVersion)))
+    const audioModeVersionDecoded = decodeURIComponent(mutation.audioModeVersion || mutation.videoModeVersion)
+    const audioModeVersionString = atob(audioModeVersionDecoded)
+    const [, videoID, audioID] = /([a-zA-Z0-9_-]{11})\|([a-zA-Z0-9_-]{11})/.exec(audioModeVersionString)
 
     return new Song({
       id: mutation.id,
