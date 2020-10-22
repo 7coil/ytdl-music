@@ -58,11 +58,11 @@ jobs:
           name: artifact
           path: out/
       - name: Upload build on Windows
-          uses: actions/upload-artifact@v1
-          if: matrix.platform == 'windows-latest'
-          with:
-            name: make
-            path: out/make/
+        uses: actions/upload-artifact@v1
+        if: matrix.platform == 'windows-latest'
+        with:
+          name: make
+          path: out/make/
       - name: Upload build on Ubuntu
         uses: actions/upload-artifact@v1
         if: matrix.platform == 'ubuntu-latest'
