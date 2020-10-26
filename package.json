@@ -8,7 +8,7 @@
     "name": "Leondro Lio",
     "url": "https://leondrolio.com/"
   },
-  "description": "A YouTube Music downloader graphical user interface",
+  "description": "An Electron.js frontend for `ytdl-core` and `ffmpeg` for music.youtube.com.",
   "devDependencies": {
     "@electron-forge/cli": "6.0.0-beta.54",
     "@electron-forge/maker-deb": "6.0.0-beta.54",
