@@ -110,27 +110,31 @@ class Song implements SongInterface {
     const downloadPath = path.join(location, 'temp_' + this.getSafeFileName())
 
     return new Promise((resolve, reject) => {
-      const downloadStream = ytdl(this.audioID, { quality: 'highestaudio' })
-      const writeStream = fs.createWriteStream(downloadPath)
+      try {
+        const downloadStream = ytdl(this.audioID, { quality: 'highestaudio' })
+        const writeStream = fs.createWriteStream(downloadPath)
 
-      downloadStream.pipe(writeStream)
+        downloadStream.pipe(writeStream)
 
-      downloadStream.on('error', (e) => {
-        console.log(e)
-        reject(e);
-      })
+        downloadStream.on('error', (e) => {
+          console.log(e)
+          reject(e);
+        })
 
-      let bytes = 0;
-      downloadStream.on('data', (chunk) => {
-        bytes += chunk.length;
-        if (typeof setStatus === 'function' && typeof index === 'number') setStatus(`Downloaded ${Math.round(bytes / 1024)}KB of ${this.title}`, index);
-      })
+        let bytes = 0;
+        downloadStream.on('data', (chunk) => {
+          bytes += chunk.length;
+          if (typeof setStatus === 'function' && typeof index === 'number') setStatus(`Downloaded ${Math.round(bytes / 1024)}KB of ${this.title}`, index);
+        })
 
-      downloadStream.on('end', () => {
-        if (typeof setStatus === 'function' && typeof index === 'number') setStatus(`Downloaded ${this.title}`, index)
-        writeStream.end()
-        resolve();
-      })
+        downloadStream.on('end', () => {
+          if (typeof setStatus === 'function' && typeof index === 'number') setStatus(`Downloaded ${this.title}`, index)
+          writeStream.end()
+          resolve();
+        })
+      } catch(e) {
+        reject(e)
+      }
     })
   }
 
