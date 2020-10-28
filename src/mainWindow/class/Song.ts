@@ -107,7 +107,7 @@ class Song implements SongInterface {
     setStatus?: (newString: string, index?: number) => any;
     index?: number;
   }) {
-    const downloadPath = path.join(location, this.getSafeFileName() + '.ogg')
+    const downloadPath = path.join(location, 'temp_' + this.getSafeFileName())
 
     return new Promise((resolve, reject) => {
       const downloadStream = ytdl(this.audioID, { quality: 'highestaudio' })
@@ -128,7 +128,7 @@ class Song implements SongInterface {
 
       downloadStream.on('end', () => {
         if (typeof setStatus === 'function' && typeof index === 'number') setStatus(`Downloaded ${this.title}`, index)
-        writeStream.close()
+        writeStream.end()
         resolve();
       })
     })
@@ -146,7 +146,7 @@ class Song implements SongInterface {
     index?: number;
   }) {
     const albumCoverPath = path.join(location, 'cover.jpg')
-    const downloadPath = path.join(location, this.getSafeFileName() + '.ogg')
+    const downloadPath = path.join(location, 'temp_' + this.getSafeFileName())
     const convertPath = path.join(location, this.getSafeFileName() + '.mp3')
     const metadata = this.getFFMPEGMetadata(additionalMetadata);
 
