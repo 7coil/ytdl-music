@@ -3,7 +3,7 @@
 
 name: Build Electron Project
 
-on: 'push'
+on: "push"
 
 jobs:
   # create_release:
@@ -28,7 +28,7 @@ jobs:
     runs-on: ${{ matrix.platform }}
     strategy:
       matrix:
-        platform: 
+        platform:
           - ubuntu-latest
           - windows-latest
     steps:

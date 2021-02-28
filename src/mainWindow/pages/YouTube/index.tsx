@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
-import styles from './index.module.scss';
-import { displayYouTube } from '../../helpers/displayYouTube';
-import { ProgressCircle } from 'react-desktop/windows';
-import { remote } from 'electron';
+import React, { Component } from "react";
+import styles from "./index.module.scss";
+import { displayYouTube } from "../../helpers/displayYouTube";
+import { ProgressCircle } from "react-desktop/windows";
+import { remote } from "electron";
 
 class YouTubePage extends Component {
   private youtubeWebView: React.RefObject<HTMLDivElement> = React.createRef();
   private currentFrame = 0;
 
   constructor(props) {
-    super(props)
+    super(props);
 
     this.handleWindowResize = this.handleWindowResize.bind(this);
   }
@@ -31,8 +31,8 @@ class YouTubePage extends Component {
         x: Math.round(rect.x),
         y: Math.round(rect.y),
         width: Math.round(rect.width),
-        height: Math.round(rect.height)
-      })
+        height: Math.round(rect.height),
+      });
 
       this.currentFrame = requestAnimationFrame(this.handleWindowResize);
     }
@@ -42,8 +42,8 @@ class YouTubePage extends Component {
       <div ref={this.youtubeWebView} className={styles.youtube}>
         <ProgressCircle size={100} />
       </div>
-    )
+    );
   }
 }
 
-export { YouTubePage }
+export { YouTubePage };

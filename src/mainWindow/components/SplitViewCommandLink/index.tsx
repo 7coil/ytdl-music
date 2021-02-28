@@ -1,7 +1,7 @@
-import React, { Component, ReactElement } from 'react';
-import SplitViewCommand from 'react-uwp/SplitViewCommand';
-import styles from './index.module.scss';
-import { Link, Route } from 'react-router-dom';
+import React, { Component, ReactElement } from "react";
+import SplitViewCommand from "react-uwp/SplitViewCommand";
+import styles from "./index.module.scss";
+import { Link, Route } from "react-router-dom";
 
 class SplitViewCommandLink extends Component<{
   label?: string;
@@ -15,10 +15,11 @@ class SplitViewCommandLink extends Component<{
 }> {
   render(): ReactElement {
     return (
-      <Link to={this.props.to} className={styles.splitViewCommandLink}><SplitViewCommand {...this.props}></SplitViewCommand></Link>
-    )
+      <Link to={this.props.to} className={styles.splitViewCommandLink}>
+        <SplitViewCommand {...this.props}></SplitViewCommand>
+      </Link>
+    );
   }
 }
 
 export { SplitViewCommandLink };
-

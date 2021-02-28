@@ -34,6 +34,7 @@
     "eslint-plugin-react": "^7.22.0",
     "fork-ts-checker-webpack-plugin": "^6.1.0",
     "node-loader": "^1.0.2",
+    "prettier": "^2.2.1",
     "sass": "^1.32.8",
     "sass-loader": "^10.0.4",
     "style-loader": "^2.0.0",
@@ -45,10 +46,13 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts ."
+    "lint": "eslint --ext .ts .",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-prettier": "^3.3.1",
     "ffmpeg-static": "^4.1.1",
     "file-loader": "^6.2.0",
     "material-icons": "^0.5.3",

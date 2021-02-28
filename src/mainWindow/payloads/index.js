@@ -1,6 +1,3 @@
-const testPayloads = [
-]
+const testPayloads = [];
 
-export {
-  testPayloads
-}
+export { testPayloads };

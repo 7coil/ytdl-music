@@ -1,15 +1,15 @@
-import { readFileSync } from 'fs';
-import React, { Component, ReactElement } from 'react';
-import { connect, DispatchProp } from 'react-redux';
-import { Slider } from 'react-uwp';
-import { Button } from 'react-uwp/Button';
-import { TextBox } from 'react-uwp/TextBox';
-import { Album } from '../../class/Album';
-import { PageContainer } from '../../components/PageContainer';
-import { insertAlbum } from '../../components/ReduxProvider/actions/album';
-import { displayYouTube } from '../../helpers/displayYouTube';
-import { testPayloads } from '../../payloads';
-import styles from './index.module.scss';
+import { readFileSync } from "fs";
+import React, { Component, ReactElement } from "react";
+import { connect, DispatchProp } from "react-redux";
+import { Slider } from "react-uwp";
+import { Button } from "react-uwp/Button";
+import { TextBox } from "react-uwp/TextBox";
+import { Album } from "../../class/Album";
+import { PageContainer } from "../../components/PageContainer";
+import { insertAlbum } from "../../components/ReduxProvider/actions/album";
+import { displayYouTube } from "../../helpers/displayYouTube";
+import { testPayloads } from "../../payloads";
+import styles from "./index.module.scss";
 
 class SettingsPage extends Component<DispatchProp> {
   constructor(props: DispatchProp) {
@@ -17,33 +17,32 @@ class SettingsPage extends Component<DispatchProp> {
     this.injectExamplePayload = this.injectExamplePayload.bind(this);
   }
   injectExamplePayload(): void {
-    const { dispatch } = this.props
+    const { dispatch } = this.props;
     testPayloads
-      .map(mutation => Album.createFromMutations(mutation))
-      .map(album => dispatch(insertAlbum(album)))
+      .map((mutation) => Album.createFromMutations(mutation))
+      .map((album) => dispatch(insertAlbum(album)));
   }
   handleEditExtraGenres(string: string): void {
-    localStorage.setItem('genres', JSON.stringify(
-      string
-        .split(',')
-        .filter(genre => genre.length !== 0)
-    ))
+    localStorage.setItem(
+      "genres",
+      JSON.stringify(string.split(",").filter((genre) => genre.length !== 0))
+    );
   }
   handleEditDelay(delay: number): void {
-    localStorage.setItem('delay', delay.toString(10))
+    localStorage.setItem("delay", delay.toString(10));
   }
   getExtraGenres(): string {
     try {
-      const text = localStorage.getItem('genres')
-      return JSON.parse(text).join(',')
+      const text = localStorage.getItem("genres");
+      return JSON.parse(text).join(",");
     } catch {
-      return '';
+      return "";
     }
   }
   getDelay(): number {
     try {
-      const delay = localStorage.getItem('delay')
-      return parseInt(delay, 10) || 0
+      const delay = localStorage.getItem("delay");
+      return parseInt(delay, 10) || 0;
     } catch {
       return 0;
     }
@@ -57,8 +56,8 @@ class SettingsPage extends Component<DispatchProp> {
         <h1>Settings</h1>
         <h2>Custom Genres</h2>
         <p>
-          Add a comma separated list of genres.
-          Genres can then be applied to albums when downloading.
+          Add a comma separated list of genres. Genres can then be applied to
+          albums when downloading.
         </p>
         <TextBox
           defaultValue={this.getExtraGenres()}
@@ -77,7 +76,7 @@ class SettingsPage extends Component<DispatchProp> {
         <Button onClick={this.injectExamplePayload}>Insert Example Payload</Button> */}
         <h2>Licence</h2>
         <pre>
-{`
+          {`
 MIT License
 
 Copyright (c) 2020 Leondro Lio <github@leondrolio.com>
@@ -102,10 +101,9 @@ SOFTWARE.
 `}
         </pre>
       </PageContainer>
-    )
+    );
   }
 }
 
 const VisibleSettingsPage = connect()(SettingsPage);
 export { VisibleSettingsPage as SettingsPage };
-

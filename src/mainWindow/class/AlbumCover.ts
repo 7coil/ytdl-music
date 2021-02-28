@@ -5,15 +5,11 @@ interface AlbumCoverInterface {
 }
 
 class AlbumCover implements AlbumCoverInterface {
-  url: string
-  width: number
-  height: number
+  url: string;
+  width: number;
+  height: number;
 
-  constructor({
-    url,
-    width,
-    height
-  }: AlbumCoverInterface) {
+  constructor({ url, width, height }: AlbumCoverInterface) {
     this.url = url;
     this.width = width;
     this.height = height;
@@ -24,7 +20,4 @@ class AlbumCover implements AlbumCoverInterface {
   }
 }
 
-export {
-  AlbumCover,
-  AlbumCoverInterface
-}
+export { AlbumCover, AlbumCoverInterface };

@@ -1,15 +1,17 @@
-import React, { Component } from 'react';
-import styles from './index.module.scss';
-import { ConnectedProps, connect } from 'react-redux';
-import { RootStateInterface } from '../ReduxProvider';
-import { AlbumInterface } from '../../class/Album';
+import React, { Component } from "react";
+import styles from "./index.module.scss";
+import { ConnectedProps, connect } from "react-redux";
+import { RootStateInterface } from "../ReduxProvider";
+import { AlbumInterface } from "../../class/Album";
 
-const mapStateToProps = (state: RootStateInterface): { albums: { albums: AlbumInterface[] } } => {
+const mapStateToProps = (
+  state: RootStateInterface
+): { albums: { albums: AlbumInterface[] } } => {
   const { albums } = state;
   return { albums };
-}
-const connector = connect(mapStateToProps)
-type PropsFromRedux = ConnectedProps<typeof connector>
+};
+const connector = connect(mapStateToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
 
 class Footer extends Component<PropsFromRedux> {
   render() {
@@ -17,11 +19,13 @@ class Footer extends Component<PropsFromRedux> {
 
     return (
       <div className={styles.footerContainer}>
-        <span>Discovered {albums.length} album{albums.length !== 1 && 's'}.</span>
+        <span>
+          Discovered {albums.length} album{albums.length !== 1 && "s"}.
+        </span>
       </div>
-    )
+    );
   }
 }
 
 const VisibleFooter = connector(Footer);
-export { VisibleFooter as Footer }
+export { VisibleFooter as Footer };

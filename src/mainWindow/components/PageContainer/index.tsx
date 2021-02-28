@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import styles from './index.module.scss';
+import React, { Component } from "react";
+import styles from "./index.module.scss";
 
 class PageContainer extends Component {
   render() {
@@ -7,9 +7,8 @@ class PageContainer extends Component {
       <div className={styles.container} {...this.props}>
         {this.props.children}
       </div>
-    )
+    );
   }
 }
 
 export { PageContainer };
-

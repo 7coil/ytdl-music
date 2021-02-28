@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { displayYouTube } from '../../helpers/displayYouTube';
-import { PageContainer } from '../../components/PageContainer';
+import React, { Component } from "react";
+import { displayYouTube } from "../../helpers/displayYouTube";
+import { PageContainer } from "../../components/PageContainer";
 
 class NotFoundPage extends Component {
   componentDidMount() {
@@ -12,8 +12,8 @@ class NotFoundPage extends Component {
         <h1>Not Found</h1>
         <p>This page does not exist.</p>
       </PageContainer>
-    )
+    );
   }
 }
 
-export { NotFoundPage }
+export { NotFoundPage };

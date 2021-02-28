@@ -1,11 +1,16 @@
-import { getAlbumsFromData, checkDataForAlbum, checkDataForMutations, getSongsFromData } from "../helpers/mutations";
-import { makeReleaseString } from '../helpers/makeReleaseString';
+import {
+  getAlbumsFromData,
+  checkDataForAlbum,
+  checkDataForMutations,
+  getSongsFromData,
+} from "../helpers/mutations";
+import { makeReleaseString } from "../helpers/makeReleaseString";
 import { Song, SongInterface } from "./Song";
 import { AlbumCover, AlbumCoverInterface } from "./AlbumCover";
-import { DEFAULT_HEADERS } from '../headers'
-import path from 'path';
-import fs from 'fs';
-import nodeFetch from 'node-fetch';
+import { DEFAULT_HEADERS } from "../headers";
+import path from "path";
+import fs from "fs";
+import nodeFetch from "node-fetch";
 import { wait } from "../helpers/wait";
 
 interface AlbumInterface {
@@ -19,13 +24,13 @@ interface AlbumInterface {
 }
 
 class Album {
-  title: string
-  artist: string
-  songs: Song[]
-  albumCovers: AlbumCover[]
-  releaseYear: number
-  releaseMonth: number
-  releaseDay: number
+  title: string;
+  artist: string;
+  songs: Song[];
+  albumCovers: AlbumCover[];
+  releaseYear: number;
+  releaseMonth: number;
+  releaseDay: number;
 
   constructor({
     title,
@@ -38,36 +43,46 @@ class Album {
   }: AlbumInterface) {
     this.title = title;
     this.artist = artist;
-    this.albumCovers = albumCovers.map(albumCover => new AlbumCover(albumCover))
+    this.albumCovers = albumCovers.map(
+      (albumCover) => new AlbumCover(albumCover)
+    );
     this.releaseYear = releaseYear;
     this.releaseMonth = releaseMonth;
     this.releaseDay = releaseDay;
 
     if (Array.isArray(songs)) {
-      this.songs = songs.map(song => new Song(song));
+      this.songs = songs.map((song) => new Song(song));
     } else {
       this.songs = [];
     }
   }
 
   getSmallestAlbumCover() {
-    return this.albumCovers.sort((a, b) => a.getPixelCount() - b.getPixelCount())[0]
+    return this.albumCovers.sort(
+      (a, b) => a.getPixelCount() - b.getPixelCount()
+    )[0];
   }
 
   getLargestAlbumCover() {
-    return this.albumCovers.sort((a, b) => b.getPixelCount() - a.getPixelCount())[0]
+    return this.albumCovers.sort(
+      (a, b) => b.getPixelCount() - a.getPixelCount()
+    )[0];
   }
 
   getReleaseString() {
-    return makeReleaseString(this.releaseYear, this.releaseMonth, this.releaseDay)
+    return makeReleaseString(
+      this.releaseYear,
+      this.releaseMonth,
+      this.releaseDay
+    );
   }
 
   addSongsFromMutations(mutations: object): void {
     const songsData = getSongsFromData(mutations);
 
     this.songs.push(
-      ...songsData.map(songData => Song.createFromMutation(this, songData))
-    )
+      ...songsData.map((songData) => Song.createFromMutation(this, songData))
+    );
   }
 
   static createFromMutations(mutations: object): Album | void {
@@ -79,17 +94,19 @@ class Album {
     const albumInterfaceData = {
       title: albumData.title,
       artist: albumData.artistDisplayName,
-      albumCovers: albumData.thumbnailDetails.thumbnails.map(mutation => new AlbumCover(mutation)),
+      albumCovers: albumData.thumbnailDetails.thumbnails.map(
+        (mutation) => new AlbumCover(mutation)
+      ),
       releaseYear: albumData.releaseDate.year,
       releaseMonth: albumData.releaseDate.month,
-      releaseDay: albumData.releaseDate.day
-    } as AlbumInterface
+      releaseDay: albumData.releaseDate.day,
+    } as AlbumInterface;
 
-    const album = new Album(albumInterfaceData)
+    const album = new Album(albumInterfaceData);
 
     album.addSongsFromMutations(mutations);
 
-    return album
+    return album;
   }
 
   downloadAlbumCover({
@@ -100,37 +117,42 @@ class Album {
     setStatus?: (newString: string, index?: number) => any;
   }): Promise<void> {
     return new Promise((resolve, reject) => {
-      const downloadPath = path.join(location, 'cover.jpg')
+      const downloadPath = path.join(location, "cover.jpg");
 
-      if (setStatus) setStatus('Downloading album cover')
+      if (setStatus) setStatus("Downloading album cover");
       nodeFetch(this.getLargestAlbumCover().url, {
-        headers: DEFAULT_HEADERS
+        headers: DEFAULT_HEADERS,
       })
         .then((res) => {
-          const dest = fs.createWriteStream(downloadPath)
-          res.body.pipe(dest)
+          const dest = fs.createWriteStream(downloadPath);
+          res.body.pipe(dest);
 
-          res.body.on('error', (e) => {
-            console.log(e)
+          res.body.on("error", (e) => {
+            console.log(e);
             reject(e);
-          })
+          });
 
           let bytes = 0;
-          res.body.on('data', (chunk) => {
+          res.body.on("data", (chunk) => {
             bytes += chunk.length;
-            if (typeof setStatus === 'function') setStatus(`Downloaded ${Math.round(bytes / 1024)}KB of Album Cover`);
-          })
+            if (typeof setStatus === "function")
+              setStatus(
+                `Downloaded ${Math.round(bytes / 1024)}KB of Album Cover`
+              );
+          });
 
-          res.body.on('end', () => {
-            if (typeof setStatus === 'function') setStatus(`Downloaded Album Cover`)
+          res.body.on("end", () => {
+            if (typeof setStatus === "function")
+              setStatus(`Downloaded Album Cover`);
             resolve();
-          })
+          });
         })
         .catch((err) => {
-          if (setStatus) setStatus('Error downloading album cover.\n' + err.stack)
+          if (setStatus)
+            setStatus("Error downloading album cover.\n" + err.stack);
           reject(err);
-        })
-    })
+        });
+    });
   }
 
   download({
@@ -148,27 +170,26 @@ class Album {
       try {
         const ffmpegInstances: Promise<any>[] = [] as Promise<any>[];
 
-        await this.downloadAlbumCover({ location, setStatus })
+        await this.downloadAlbumCover({ location, setStatus });
 
         for (let i = 0; i < this.songs.length; i += 1) {
           const song = this.songs[i];
 
           await song.download({ location, setStatus, index: i });
           if (delay) await wait(delay);
-          ffmpegInstances.push(song.convert({ location, additionalMetadata, setStatus, index: i }));
+          ffmpegInstances.push(
+            song.convert({ location, additionalMetadata, setStatus, index: i })
+          );
         }
 
         await Promise.all(ffmpegInstances);
 
-        resolve()
+        resolve();
       } catch (e) {
-        reject(e)
+        reject(e);
       }
-    })
+    });
   }
 }
 
-export {
-  Album,
-  AlbumInterface
-}
+export { Album, AlbumInterface };

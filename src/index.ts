@@ -1,6 +1,6 @@
-import { app, BrowserWindow, BrowserView, ipcMain } from 'electron';
-import { AlbumInterface, Album } from './mainWindow/class/Album';
-import electronSquirrelStartup from 'electron-squirrel-startup';
+import { app, BrowserWindow, BrowserView, ipcMain } from "electron";
+import { AlbumInterface, Album } from "./mainWindow/class/Album";
+import electronSquirrelStartup from "electron-squirrel-startup";
 
 declare const YOUTUBE_MUSIC_PRELOAD_WEBPACK_ENTRY: any;
 declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
@@ -20,19 +20,19 @@ const createWindow = () => {
     frame: false,
     webPreferences: {
       nodeIntegration: true,
-      enableRemoteModule: true
-    }
+      enableRemoteModule: true,
+    },
   });
 
   // and load the index.html of the app.
-  youtubeMusic.webContents.loadURL('https://music.youtube.com/');
+  youtubeMusic.webContents.loadURL("https://music.youtube.com/");
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
-  ipcMain.on('http-request', (e, data) => {
-    mainWindow.webContents.send('http-request', data)
+  ipcMain.on("http-request", (e, data) => {
+    mainWindow.webContents.send("http-request", data);
   });
 
-  ipcMain.on('show-youtube', (e, show) => {
+  ipcMain.on("show-youtube", (e, show) => {
     if (show) {
       mainWindow.addBrowserView(youtubeMusic);
     } else {
@@ -40,27 +40,38 @@ const createWindow = () => {
     }
   });
 
-  ipcMain.on('youtube-clicked', () => {
-    mainWindow.webContents.send('youtube-clicked');
+  ipcMain.on("youtube-clicked", () => {
+    mainWindow.webContents.send("youtube-clicked");
   });
 
-  ipcMain.on('download-album', (e, location: string, additionalMetadata: { [key: string]: string | number }, album: AlbumInterface, delay?: number) => {
-    const realAlbum = new Album(album);
+  ipcMain.on(
+    "download-album",
+    (
+      e,
+      location: string,
+      additionalMetadata: { [key: string]: string | number },
+      album: AlbumInterface,
+      delay?: number
+    ) => {
+      const realAlbum = new Album(album);
 
-    realAlbum.download({
-      location,
-      additionalMetadata,
-      setStatus: (str, index) => mainWindow.webContents.send('set-status', str, index),
-      delay
-    })
-      .then(() => {
-        mainWindow.webContents.send('downloaded-album')
-      })
-  })
-}
+      realAlbum
+        .download({
+          location,
+          additionalMetadata,
+          setStatus: (str, index) =>
+            mainWindow.webContents.send("set-status", str, index),
+          delay,
+        })
+        .then(() => {
+          mainWindow.webContents.send("downloaded-album");
+        });
+    }
+  );
+};
 
 if (electronSquirrelStartup) {
   app.quit();
 } else {
-  app.whenReady().then(createWindow)
+  app.whenReady().then(createWindow);
 }

@@ -4,7 +4,8 @@
   flex-direction: column;
   margin-bottom: 0.2em;
   padding: 0.2em;
-  &:hover, &.selected {
+  &:hover,
+  &.selected {
     background-color: #eee;
   }
 }

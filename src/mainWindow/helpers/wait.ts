@@ -5,4 +5,4 @@ const wait = (time: number): Promise<void> =>
     }, time);
   });
 
-export { wait }
+export { wait };
