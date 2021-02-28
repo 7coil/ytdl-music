@@ -106,7 +106,7 @@ class Song implements SongInterface {
     location: string;
     setStatus?: (newString: string, index?: number) => any;
     index?: number;
-  }) {
+  }): Promise<void> {
     const downloadPath = path.join(location, 'temp_' + this.getSafeFileName())
 
     return new Promise((resolve, reject) => {
@@ -148,7 +148,7 @@ class Song implements SongInterface {
     additionalMetadata: { [key: string]: string | number };
     setStatus?: (newString: string, index?: number) => any;
     index?: number;
-  }) {
+  }): Promise<void> {
     const albumCoverPath = path.join(location, 'cover.jpg')
     const downloadPath = path.join(location, 'temp_' + this.getSafeFileName())
     const convertPath = path.join(location, this.getSafeFileName() + '.mp3')

@@ -44,13 +44,14 @@ const createWindow = () => {
     mainWindow.webContents.send('youtube-clicked');
   });
 
-  ipcMain.on('download-album', (e, location: string, additionalMetadata: { [key: string]: string | number }, album: AlbumInterface) => {
+  ipcMain.on('download-album', (e, location: string, additionalMetadata: { [key: string]: string | number }, album: AlbumInterface, delay?: number) => {
     const realAlbum = new Album(album);
 
     realAlbum.download({
       location,
       additionalMetadata,
-      setStatus: (str, index) => mainWindow.webContents.send('set-status', str, index)
+      setStatus: (str, index) => mainWindow.webContents.send('set-status', str, index),
+      delay
     })
       .then(() => {
         mainWindow.webContents.send('downloaded-album')

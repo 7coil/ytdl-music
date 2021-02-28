@@ -6,6 +6,7 @@ import { DEFAULT_HEADERS } from '../headers'
 import path from 'path';
 import fs from 'fs';
 import nodeFetch from 'node-fetch';
+import { wait } from "../helpers/wait";
 
 interface AlbumInterface {
   title: string;
@@ -97,7 +98,7 @@ class Album {
   }: {
     location: string;
     setStatus?: (newString: string, index?: number) => any;
-  }) {
+  }): Promise<void> {
     return new Promise((resolve, reject) => {
       const downloadPath = path.join(location, 'cover.jpg')
 
@@ -136,11 +137,13 @@ class Album {
     location,
     additionalMetadata,
     setStatus,
+    delay,
   }: {
     location: string;
     additionalMetadata: { [key: string]: string | number };
     setStatus?: (newString: string, index?: number) => any;
-  }) {
+    delay?: number;
+  }): Promise<void> {
     return new Promise(async (resolve, reject) => {
       try {
         const ffmpegInstances: Promise<any>[] = [] as Promise<any>[];
@@ -151,6 +154,7 @@ class Album {
           const song = this.songs[i];
 
           await song.download({ location, setStatus, index: i });
+          if (delay) await wait(delay);
           ffmpegInstances.push(song.convert({ location, additionalMetadata, setStatus, index: i }));
         }
 

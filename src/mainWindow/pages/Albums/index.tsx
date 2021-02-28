@@ -73,6 +73,7 @@ class AlbumsPage extends Component<PropsFromRedux, { selectedAlbum: AlbumInterfa
         if (result.canceled) return;
 
         const downloadDirectory = result.filePaths[0];
+        const delay = parseInt(window.localStorage.getItem('delay'), 10) || 0;
 
         const additionalMetadata: { [key: string]: string | number } = {};
         if (this.state.overwriteAlbumTitle) additionalMetadata.album = this.state.overwriteAlbumTitle;
@@ -83,7 +84,7 @@ class AlbumsPage extends Component<PropsFromRedux, { selectedAlbum: AlbumInterfa
           downloadStatus: DOWNLOAD_STATUS.downloading
         })
 
-        ipcRenderer.send('download-album', downloadDirectory, additionalMetadata, this.state.selectedAlbum)
+        ipcRenderer.send('download-album', downloadDirectory, additionalMetadata, this.state.selectedAlbum, delay)
         ipcRenderer.on('set-status', this.handleDownloadMessage)
         ipcRenderer.once('downloaded-album', () => {
           this.setState({

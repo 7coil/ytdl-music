@@ -1,6 +1,7 @@
 import { readFileSync } from 'fs';
 import React, { Component, ReactElement } from 'react';
 import { connect, DispatchProp } from 'react-redux';
+import { Slider } from 'react-uwp';
 import { Button } from 'react-uwp/Button';
 import { TextBox } from 'react-uwp/TextBox';
 import { Album } from '../../class/Album';
@@ -28,12 +29,23 @@ class SettingsPage extends Component<DispatchProp> {
         .filter(genre => genre.length !== 0)
     ))
   }
+  handleEditDelay(delay: number): void {
+    localStorage.setItem('delay', delay.toString(10))
+  }
   getExtraGenres(): string {
     try {
       const text = localStorage.getItem('genres')
       return JSON.parse(text).join(',')
     } catch {
       return '';
+    }
+  }
+  getDelay(): number {
+    try {
+      const delay = localStorage.getItem('delay')
+      return parseInt(delay, 10) || 0
+    } catch {
+      return 0;
     }
   }
   componentDidMount(): void {
@@ -52,8 +64,17 @@ class SettingsPage extends Component<DispatchProp> {
           defaultValue={this.getExtraGenres()}
           onChangeValue={this.handleEditExtraGenres}
         />
-        <h2>Developer Actions</h2>
-        <Button onClick={this.injectExamplePayload}>Insert Example Payload</Button>
+        <h2>Delay</h2>
+        <p>Insert a delay between downloads. Calculated in milliseconds.</p>
+        <Slider
+          minValue={0}
+          maxValue={2000}
+          initValue={this.getDelay()}
+          onChangeValue={this.handleEditDelay}
+          showValueInfo={true}
+        />
+        {/* <h2>Developer Actions</h2>
+        <Button onClick={this.injectExamplePayload}>Insert Example Payload</Button> */}
         <h2>Licence</h2>
         <pre>
 {`
