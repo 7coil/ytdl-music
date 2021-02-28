@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { displayYouTube } from "../../helpers/displayYouTube";
 import { PageContainer } from "../../components/PageContainer";
+import { Icon } from "react-uwp";
 
 class LandingPage extends Component {
   componentDidMount() {
@@ -11,10 +12,10 @@ class LandingPage extends Component {
       <PageContainer>
         <h1>Welcome to ytdl-music!</h1>
         <p>
-          To get started, browse to an album page in the "YouTube Music" tab.
+          To get started, browse to an album page in the YouTube Music (<Icon>PlayLegacy</Icon>) tab.
         </p>
         <p>
-          You can then open the "Albums" tab and select an album to download.
+          When the album counter in the footer increases, use the Albums (<Icon>BulletedList</Icon>) tab and select an album to download.
         </p>
       </PageContainer>
     );
