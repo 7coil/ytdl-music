@@ -42,9 +42,9 @@ jobs:
         if: matrix.platform == 'ubuntu-latest'
         run: sudo apt-get install fakeroot dpkg rpm
       - name: Install project dependencies
-        run: npm install
+        run: yarn
       - name: Run electron-forge
-        run: npm run make
+        run: yarn make
       - name: Upload artifact on Windows
         uses: actions/upload-artifact@v1
         if: matrix.platform == 'windows-latest'
