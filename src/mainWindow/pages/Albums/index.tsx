@@ -216,9 +216,11 @@ class AlbumsPage extends Component<
             <table>
               <thead>
                 <tr>
-                  <th>#</th>
+                  <th>Track No.</th>
                   <th>Title</th>
                   <th>Artist</th>
+                  <th>Video ID</th>
+                  <th>Audio ID</th>
                 </tr>
               </thead>
               <tbody>
@@ -229,6 +231,8 @@ class AlbumsPage extends Component<
                       <td>{song.trackNumber}</td>
                       <td>{song.title}</td>
                       <td>{this.state.overwriteArtist || song.artist}</td>
+                      <td>{song.videoID}</td>
+                      <td>{song.audioID}</td>
                     </tr>
                   ))}
               </tbody>

@@ -1,0 +1,15 @@
+table {
+  
+  tr {
+    td, th {
+      padding: .25em 1em;
+      white-space: pre;
+    }
+  }
+
+  td, th {
+    border: 1px solid darkgray;
+  }
+  
+  border-collapse: collapse;
+}
