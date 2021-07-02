@@ -10,6 +10,7 @@ const createWindow = () => {
   const youtubeMusic = new BrowserView({
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
       preload: YOUTUBE_MUSIC_PRELOAD_WEBPACK_ENTRY,
     },
   });
@@ -20,6 +21,7 @@ const createWindow = () => {
     frame: false,
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
       enableRemoteModule: true,
     },
   });

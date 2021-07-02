@@ -1,15 +1,12 @@
-import { readFileSync } from "fs";
 import React, { Component, ReactElement } from "react";
 import { connect, DispatchProp } from "react-redux";
 import { Slider } from "react-uwp";
-import { Button } from "react-uwp/Button";
 import { TextBox } from "react-uwp/TextBox";
 import { Album } from "../../class/Album";
 import { PageContainer } from "../../components/PageContainer";
 import { insertAlbum } from "../../components/ReduxProvider/actions/album";
 import { displayYouTube } from "../../helpers/displayYouTube";
 import { testPayloads } from "../../payloads";
-import styles from "./index.module.scss";
 
 class SettingsPage extends Component<DispatchProp> {
   constructor(props: DispatchProp) {

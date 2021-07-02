@@ -45,7 +45,11 @@ module.exports = {
     rules,
   },
   plugins: plugins,
+  target: 'electron-renderer',
   resolve: {
     extensions: [".js", ".ts", ".jsx", ".tsx", ".css"],
+    fallback: {
+      __dirname: '/'
+    }
   },
 };
